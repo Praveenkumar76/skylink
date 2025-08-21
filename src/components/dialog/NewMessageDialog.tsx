@@ -10,7 +10,7 @@ import Picker from "@emoji-mart/react";
 import { NewMessageDialogProps } from "@/types/DialogProps";
 import CircularLoading from "../misc/CircularLoading";
 import { checkUserExists, createMessage } from "@/utilities/fetch";
-import { uploadFile } from "@/utilities/storage";
+import { uploadFile } from "@/utilities/supabase/upload";
 import Uploader from "../misc/Uploader";
 
 export default function NewMessageDialog({ open, handleNewMessageClose, token, recipient = "" }: NewMessageDialogProps) {

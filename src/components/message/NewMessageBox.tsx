@@ -10,7 +10,7 @@ import * as yup from "yup";
 import CircularLoading from "../misc/CircularLoading";
 import Uploader from "../misc/Uploader";
 import { createMessage } from "@/utilities/fetch";
-import { uploadFile } from "@/utilities/storage";
+import { uploadFile } from "@/utilities/supabase/upload";
 import { MessageFormProps } from "@/types/MessageProps";
 
 export default function NewMessageBox({ messagedUsername, token, setFreshMessages, freshMessages }: MessageFormProps) {

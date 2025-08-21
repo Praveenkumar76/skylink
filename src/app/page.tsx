@@ -51,7 +51,7 @@ export default function RootPage() {
         <>
             <main className="root">
                 <div className="root-left">
-                    <Image src="/assets/root.png" alt="" fill />
+                    <Image src="/assets/root.png" alt="" fill sizes="100vw" />
                     <div className="root-left-logo">
                         <Image src="/assets/favicon-white.png" alt="" width={140} height={140} />
                     </div>

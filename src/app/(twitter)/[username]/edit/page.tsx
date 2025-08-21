@@ -1,14 +1,14 @@
 "use client";
-
-import { useContext } from "react";
-
+import React, { useContext } from "react";
 import { AuthContext } from "../../layout";
 import CircularLoading from "@/components/misc/CircularLoading";
 import EditProfile from "@/components/user/EditProfile";
 import BackToArrow from "@/components/misc/BackToArrow";
 
 export default function EditPage(props: any) {
-    const username: string = props?.params?.username;
+    // In Next 15, route params are a Promise in client components. Use React.use() to unwrap.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { username }: { username: string } = (React as any).use(props.params);
     const { token, isPending, refreshToken } = useContext(AuthContext);
 
     if (isPending) return <CircularLoading />;

@@ -106,6 +106,7 @@ export default function Profile({ profile }: { profile: ProfileWithFollows }) {
                         alt="profile-header"
                         src={profile.headerUrl ? getFullURL(profile.headerUrl) : "/assets/header.jpg"}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                     />
                     <div className="avatar-wrapper">
                         <Avatar

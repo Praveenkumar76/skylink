@@ -9,7 +9,7 @@ import Image from "next/image";
 
 import { UserProps } from "@/types/UserProps";
 import CircularLoading from "../misc/CircularLoading";
-import { uploadFile } from "@/utilities/storage";
+import { uploadFile } from "@/utilities/supabase/upload";
 import { editUser } from "@/utilities/fetch";
 import { getFullURL } from "@/utilities/misc/getFullURL";
 import CustomSnackbar from "../misc/CustomSnackbar";
@@ -144,6 +144,7 @@ export default function EditProfile({ profile, refreshToken }: { profile: UserPr
                             : "/assets/header.jpg"
                     }
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                 />
                 <div>
                     <button className="icon-hoverable add-photo" onClick={handleHeaderClick}>

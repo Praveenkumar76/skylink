@@ -12,7 +12,7 @@ import CircularLoading from "../misc/CircularLoading";
 import { createReply } from "@/utilities/fetch";
 import Uploader from "../misc/Uploader";
 import { getFullURL } from "@/utilities/misc/getFullURL";
-import { uploadFile } from "@/utilities/storage";
+import { uploadFile } from "@/utilities/supabase/upload";
 import { UserProps } from "@/types/UserProps";
 import { TweetProps } from "@/types/TweetProps";
 import ProgressCircle from "../misc/ProgressCircle";

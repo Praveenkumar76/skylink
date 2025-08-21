@@ -12,7 +12,7 @@ import { createTweet } from "@/utilities/fetch";
 import { NewTweetProps } from "@/types/TweetProps";
 import Uploader from "../misc/Uploader";
 import { getFullURL } from "@/utilities/misc/getFullURL";
-import { uploadFile } from "@/utilities/storage";
+import { uploadFile } from "@/utilities/supabase/upload";
 import ProgressCircle from "../misc/ProgressCircle";
 
 export default function NewTweet({ token, handleSubmit }: NewTweetProps) {

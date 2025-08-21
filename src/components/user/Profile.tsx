@@ -12,7 +12,7 @@ import { AiFillTwitterCircle, AiOutlineLink } from "react-icons/ai";
 
 import { formatDateForProfile } from "@/utilities/date";
 import { AuthContext } from "@/app/(twitter)/layout";
-import { UserProps } from "@/types/UserProps";
+import { ProfileWithFollows, UserProps } from "@/types/UserProps";
 import TweetArrayLength from "../tweet/TweetArrayLength";
 import Follow from "./Follow";
 import User from "./User";
@@ -22,7 +22,7 @@ import { SnackbarProps } from "@/types/SnackbarProps";
 import CustomSnackbar from "../misc/CustomSnackbar";
 import NewMessageDialog from "../dialog/NewMessageDialog";
 
-export default function Profile({ profile }: { profile: UserProps }) {
+export default function Profile({ profile }: { profile: ProfileWithFollows }) {
     const [dialogType, setDialogType] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -41,8 +41,8 @@ export default function Profile({ profile }: { profile: UserProps }) {
             });
         }
 
-        if (type === "following" && profile.following.length === 0) return;
-        if (type === "followers" && profile.followers.length === 0) return;
+        if (type === "following" && profile._count.following === 0) return;
+        if (type === "followers" && profile._count.followers === 0) return;
 
         setDialogType(type);
         setIsDialogOpen(true);
@@ -82,8 +82,8 @@ export default function Profile({ profile }: { profile: UserProps }) {
     };
 
     const isFollowingTokenOwner = () => {
-        if (profile.following.length === 0 || !token) return false;
-        const isFollowing = profile.following.some((user) => user.id === token.id);
+        if (!token || !profile.following || profile.following.length === 0) return false;
+        const isFollowing = profile.following.some((edge) => edge.followingId === token.id);
         return isFollowing;
     };
 
@@ -153,11 +153,11 @@ export default function Profile({ profile }: { profile: UserProps }) {
                     </div>
                     <div className="profile-info-popularity">
                         <div onClick={() => handleDialogOpen("following")} className="popularity-section">
-                            <span className="count">{profile.following.length}</span>{" "}
+                            <span className="count">{profile._count.following}</span>{" "}
                             <span className="text-muted">Following</span>
                         </div>
                         <div onClick={() => handleDialogOpen("followers")} className="popularity-section">
-                            <span className="count">{profile.followers.length}</span>{" "}
+                            <span className="count">{profile._count.followers}</span>{" "}
                             <span className="text-muted">Followers</span>
                         </div>
                     </div>
@@ -209,14 +209,14 @@ export default function Profile({ profile }: { profile: UserProps }) {
                     <DialogContent sx={{ paddingX: 0 }}>
                         <div className="user-list">
                             {dialogType === "following"
-                                ? profile.following.map((user: UserProps) => (
-                                      <div className="user-wrapper" key={"following" + user.id}>
-                                          <User user={user} />
+                                ? profile.following.map((edge) => (
+                                      <div className="user-wrapper" key={"following" + edge.followingId}>
+                                          {edge.following && <User user={edge.following as unknown as UserProps} />}
                                       </div>
                                   ))
-                                : profile.followers.map((user: UserProps) => (
-                                      <div className="user-wrapper" key={"followers" + user.id}>
-                                          <User user={user} />
+                                : profile.followers.map((edge) => (
+                                      <div className="user-wrapper" key={"followers" + edge.followerId}>
+                                          {edge.follower && <User user={edge.follower as unknown as UserProps} />}
                                       </div>
                                   ))}
                         </div>

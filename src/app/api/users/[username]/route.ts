@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import { prisma } from "@/prisma/client";
 
-export async function GET(request: NextRequest, { params: { username } }: { params: { username: string } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ username: string }> }) {
+    const { username } = await context.params;
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -20,44 +20,36 @@ export async function GET(request: NextRequest, { params: { username } }: { para
                 isPremium: true,
                 photoUrl: true,
                 headerUrl: true,
+                // Corrected: Select the 'follower' relation from within the 'followers' (Follows) list.
                 followers: {
                     select: {
-                        id: true,
-                        name: true,
-                        username: true,
-                        description: true,
-                        isPremium: true,
-                        photoUrl: true,
-                        followers: {
+                        follower: { // This gets you to the User model of the follower
                             select: {
                                 id: true,
-                            },
-                        },
-                        following: {
-                            select: {
-                                id: true,
+                                name: true,
+                                username: true,
+                                photoUrl: true,
                             },
                         },
                     },
                 },
+                // Corrected: Select the 'following' relation from within the 'following' (Follows) list.
                 following: {
                     select: {
-                        id: true,
-                        name: true,
-                        username: true,
-                        description: true,
-                        isPremium: true,
-                        photoUrl: true,
-                        followers: {
+                        following: { // This gets you to the User model of the person being followed
                             select: {
                                 id: true,
+                                name: true,
+                                username: true,
+                                photoUrl: true,
                             },
                         },
-                        following: {
-                            select: {
-                                id: true,
-                            },
-                        },
+                    },
+                },
+                _count: {
+                    select: {
+                        followers: true,
+                        following: true,
                     },
                 },
             },

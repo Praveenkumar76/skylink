@@ -8,12 +8,12 @@ import { UserProps } from "@/types/UserProps";
 
 export async function POST(
     request: NextRequest,
-    { params: { tweetId, username } }: { params: { tweetId: string; username: string } }
+    context: { params: Promise<{ tweetId: string; username: string }> }
 ) {
+    const { tweetId, username } = await context.params;
     const tokenOwnerId = await request.json();
 
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 
     const secret = process.env.CREATION_SECRET_KEY;

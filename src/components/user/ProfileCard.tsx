@@ -17,9 +17,10 @@ export default function ProfileCard({ username, token }: { username: string; tok
     if (isLoading) return <CircularLoading />;
 
     const isFollowingTokenOwner = () => {
-        if (data.user.following.length === 0 || !token) return false;
-        const isFollowing = data.user.following.some((user: UserProps) => user.id === token.id);
-        return isFollowing;
+        if (!data?.user || !token) return false;
+        const followingEdges = data.user.following as { followingId: string }[] | undefined;
+        if (!followingEdges || followingEdges.length === 0) return false;
+        return followingEdges.some((edge) => edge.followingId === token.id);
     };
 
     return (
@@ -47,10 +48,10 @@ export default function ProfileCard({ username, token }: { username: string; tok
             {data.user.description && <div className="profile-info-desc">{data.user.description}</div>}
             <div className="profile-info-popularity">
                 <div className="popularity-section">
-                    <span className="count">{data.user.following.length}</span> <span className="text-muted">Following</span>
+                    <span className="count">{data.user._count?.following ?? 0}</span> <span className="text-muted">Following</span>
                 </div>
                 <div className="popularity-section">
-                    <span className="count">{data.user.followers.length}</span> <span className="text-muted">Followers</span>
+                    <span className="count">{data.user._count?.followers ?? 0}</span> <span className="text-muted">Followers</span>
                 </div>
             </div>
         </div>

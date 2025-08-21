@@ -6,7 +6,8 @@ import { verifyJwtToken } from "@/utilities/auth";
 import { createNotification } from "@/utilities/fetch";
 import { UserProps } from "@/types/UserProps";
 
-export async function GET(request: NextRequest, { params: { tweetId } }: { params: { tweetId: string } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ tweetId: string }> }) {
+    const { tweetId } = await context.params;
     try {
         const tweets = await prisma.tweet.findMany({
             where: {
@@ -32,14 +33,6 @@ export async function GET(request: NextRequest, { params: { tweetId } }: { param
                         description: true,
                         isPremium: true,
                         photoUrl: true,
-                        followers: {
-                            select: {
-                                id: true,
-                                username: true,
-                                name: true,
-                                photoUrl: true,
-                            },
-                        },
                     },
                 },
                 repliedTo: {
@@ -74,12 +67,12 @@ export async function GET(request: NextRequest, { params: { tweetId } }: { param
 
 export async function POST(
     request: NextRequest,
-    { params: { tweetId, username } }: { params: { tweetId: string; username: string } }
+    context: { params: Promise<{ tweetId: string; username: string }> }
 ) {
+    const { tweetId, username } = await context.params;
     const { authorId, text, photoUrl } = await request.json();
 
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 
     const secret = process.env.CREATION_SECRET_KEY;

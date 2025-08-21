@@ -96,7 +96,9 @@ export default function Like({ tweetId, tweetAuthor }: TweetOptionsProps) {
         const likedBy = data.tweet?.likedBy;
         const isLikedByTokenOwner = likedBy.some((user: { id: string }) => JSON.stringify(user.id) === tokenOwnerId);
 
-        if (!likeMutation.isLoading && !unlikeMutation.isLoading) {
+        const likePending = (likeMutation as any).status === "pending";
+        const unlikePending = (unlikeMutation as any).status === "pending";
+        if (!likePending && !unlikePending) {
             if (isLikedByTokenOwner) {
                 unlikeMutation.mutate(tokenOwnerId);
             } else {

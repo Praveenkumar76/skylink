@@ -3,11 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { AuthContext } from "@/app/(twitter)/layout";
 import { updateUserFollows } from "@/utilities/fetch";
-import { UserProps, UserResponse } from "@/types/UserProps";
+import { UserResponse } from "@/types/UserProps";
 import CustomSnackbar from "../misc/CustomSnackbar";
 import { SnackbarProps } from "@/types/SnackbarProps";
 
-export default function Follow({ profile }: { profile: UserProps }) {
+export default function Follow({ profile }: { profile: any }) {
     const [isFollowed, setIsFollowed] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -25,15 +25,6 @@ export default function Follow({ profile }: { profile: UserProps }) {
             await queryClient.cancelQueries({ queryKey: queryKey });
             const previous = queryClient.getQueryData<UserResponse>(queryKey);
             setIsFollowed(true);
-            if (previous) {
-                queryClient.setQueryData(queryKey, {
-                    ...previous,
-                    user: {
-                        ...previous.user,
-                        followers: [...previous.user.followers, tokenOwnerId],
-                    },
-                });
-            }
             return { previous };
         },
         onError: (err, variables, context) => {
@@ -53,17 +44,6 @@ export default function Follow({ profile }: { profile: UserProps }) {
             await queryClient.cancelQueries({ queryKey: queryKey });
             const previous = queryClient.getQueryData<UserResponse>(queryKey);
             setIsFollowed(false);
-            if (previous) {
-                queryClient.setQueryData(queryKey, {
-                    ...previous,
-                    user: {
-                        ...previous.user,
-                        followers: previous.user.followers.filter(
-                            (user: UserProps) => JSON.stringify(user.id) !== tokenOwnerId
-                        ),
-                    },
-                });
-            }
             return { previous };
         },
         onError: (err, variables, context) => {
@@ -88,10 +68,12 @@ export default function Follow({ profile }: { profile: UserProps }) {
         }
 
         const tokenOwnerId = JSON.stringify(token.id);
-        const followers = profile.followers;
-        const isFollowedByTokenOwner = followers?.some((user: { id: string }) => JSON.stringify(user.id) === tokenOwnerId);
+        const followers = profile.followers as { followerId: string }[] | undefined;
+        const isFollowedByTokenOwner = followers?.some((edge) => JSON.stringify(edge.followerId) === tokenOwnerId);
 
-        if (!followMutation.isLoading && !followMutation.isLoading) {
+        const followPending = (followMutation as any).status === "pending";
+        const unfollowPending = (unfollowMutation as any).status === "pending";
+        if (!followPending && !unfollowPending) {
             if (isFollowedByTokenOwner) {
                 unfollowMutation.mutate(tokenOwnerId);
             } else {
@@ -111,11 +93,9 @@ export default function Follow({ profile }: { profile: UserProps }) {
     useEffect(() => {
         if (!isPending && token) {
             const tokenOwnerId = JSON.stringify(token.id);
-            const followers = profile.followers;
-            const isFollowedByTokenOwner = followers?.some(
-                (user: { id: string }) => JSON.stringify(user.id) === tokenOwnerId
-            );
-            setIsFollowed(isFollowedByTokenOwner);
+            const followers = profile.followers as { followerId: string }[] | undefined;
+            const followed = followers?.some((edge) => JSON.stringify(edge.followerId) === tokenOwnerId);
+            setIsFollowed(!!followed);
         }
     }, [isPending]);
 

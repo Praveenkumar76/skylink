@@ -1,3 +1,4 @@
+'use client'
 import { TweetProps, TweetsArray } from "@/types/TweetProps";
 import Tweet from "./Tweet";
 

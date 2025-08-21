@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -47,7 +49,7 @@ export default function SingleTweet({ tweet, token }: { tweet: TweetProps; token
                 open: true,
             });
             await sleepFunction(); // for waiting snackbar to acknowledge delete for better user experience
-            queryClient.invalidateQueries(["tweets", tweet.author.username]);
+            queryClient.invalidateQueries({ queryKey: ["tweets", tweet.author.username] });
             router.replace(`/${tweet.author.username}`);
         },
         onError: (error) => console.log(error),

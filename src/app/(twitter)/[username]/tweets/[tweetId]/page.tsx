@@ -1,46 +1,62 @@
-"use client";
-
-import { useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
-
-import { getUserTweet } from "@/utilities/fetch";
-import SingleTweet from "@/components/tweet/SingleTweet";
-import CircularLoading from "@/components/misc/CircularLoading";
-import { AuthContext } from "@/app/(twitter)/layout";
-import NotFound from "@/app/not-found";
+import NotFound from "@/components/misc/NotFound";
 import BackToArrow from "@/components/misc/BackToArrow";
+import SingleTweet from "@/components/tweet/SingleTweet";
+import { prisma } from "@/prisma/client";
+import { verifyJwtToken } from "@/utilities/auth";
+import { cookies } from "next/headers";
 
-export default function SingleTweetPage({
-    params: { username, tweetId },
-}: {
-    params: { username: string; tweetId: string };
-}) {
-    const queryKey = ["tweets", username, tweetId];
+export default async function SingleTweetPage({ params }: { params: Promise<{ username: string; tweetId: string }> }) {
+    const { username, tweetId } = await params;
 
-    const { token, isPending } = useContext(AuthContext);
-    const { isLoading, data, isFetched } = useQuery({
-        queryKey: queryKey,
-        queryFn: () => getUserTweet(tweetId, username),
+    const tokenCookie = (await cookies()).get("token")?.value;
+    const token = tokenCookie ? await verifyJwtToken(tokenCookie) : null;
+
+    const data = await prisma.tweet.findUnique({
+        where: { id: tweetId },
+        include: {
+            author: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true,
+                    isPremium: true,
+                    photoUrl: true,
+                    description: true,
+                },
+            },
+            likedBy: { select: { id: true, username: true, name: true, isPremium: true, photoUrl: true, description: true } },
+            retweetedBy: { select: { id: true, username: true, name: true, isPremium: true, photoUrl: true, description: true } },
+            retweetOf: {
+                select: {
+                    id: true,
+                    author: { select: { id: true, username: true, name: true, isPremium: true, photoUrl: true, description: true } },
+                    authorId: true,
+                    createdAt: true,
+                    likedBy: { select: { id: true, username: true, name: true, isPremium: true, photoUrl: true, description: true } },
+                    retweetedBy: { select: { id: true, username: true, name: true, isPremium: true, photoUrl: true, description: true } },
+                    photoUrl: true,
+                    text: true,
+                    isReply: true,
+                    repliedTo: { select: { id: true, author: { select: { id: true, username: true, name: true, isPremium: true, photoUrl: true, description: true } } } },
+                    replies: { select: { authorId: true } },
+                },
+            },
+            replies: { select: { id: true } },
+            repliedTo: { select: { id: true, author: { select: { id: true, username: true, name: true, isPremium: true, photoUrl: true, description: true } } } },
+        },
     });
 
-    if (!isLoading && !data.tweet) return NotFound();
+    if (!data) return <NotFound />;
 
-    let backToProps = {
-        title: username,
-        url: `/${username}`,
-    };
-
-    if (isFetched && data.tweet.isReply) {
-        backToProps = {
-            title: "Tweet",
-            url: `/${data.tweet.repliedTo.author.username}/tweets/${data.tweet.repliedTo.id}`,
-        };
+    let backToProps = { title: username, url: `/${username}` } as { title: string; url: string };
+    if (data?.isReply && data.repliedTo) {
+        backToProps = { title: "Tweet", url: `/${data.repliedTo.author.username}/tweets/${data.repliedTo.id}` };
     }
 
     return (
         <div>
-            {isFetched && <BackToArrow title={backToProps.title} url={backToProps.url} />}
-            {isLoading || isPending ? <CircularLoading /> : <SingleTweet tweet={data.tweet} token={token} />}
+            <BackToArrow title={backToProps.title} url={backToProps.url} />
+            <SingleTweet tweet={data as any} token={token as any} />
         </div>
     );
 }

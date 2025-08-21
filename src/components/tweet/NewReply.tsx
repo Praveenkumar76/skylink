@@ -55,7 +55,7 @@ export default function NewReply({ token, tweet }: { token: UserProps; tweet: Tw
         validationSchema: validationSchema,
         onSubmit: async (values, { resetForm }) => {
             if (photoFile) {
-                const path: string | void = await uploadFile(photoFile);
+                const path: string | null = await uploadFile(photoFile, "tweets");
                 if (!path) throw new Error("Error uploading image.");
                 values.photoUrl = path;
                 setPhotoFile(null);

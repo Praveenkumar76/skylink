@@ -14,24 +14,24 @@ export default function ExplorePage() {
     const { token, isPending } = useContext(AuthContext);
 
     const { data, fetchNextPage, isLoading, hasNextPage } = useInfiniteQuery(
-        ["tweets"],
-        async ({ pageParam = 1 }) => getAllTweets(pageParam),
         {
-            getNextPageParam: (lastResponse) => {
+            queryKey: ["tweets"],
+            queryFn: async ({ pageParam = 1 }) => getAllTweets(pageParam.toString()),
+            getNextPageParam: (lastResponse: any) => {
                 if (lastResponse.nextPage > lastResponse.lastPage) return false;
                 return lastResponse.nextPage;
             },
-        }
+        } as any
     );
 
     const tweetsResponse = useMemo(
         () =>
-            data?.pages.reduce((prev, page) => {
+            data?.pages.reduce((prev: any, page: any) => {
                 return {
                     nextPage: page.nextPage,
-                    tweets: [...prev.tweets, ...page.tweets],
+                    tweets: [...(prev?.tweets || []), ...(page?.tweets || [])],
                 };
-            }),
+            }, { tweets: [] }),
         [data]
     );
 
@@ -45,12 +45,12 @@ export default function ExplorePage() {
                 <CircularLoading />
             ) : (
                 <InfiniteScroll
-                    dataLength={tweetsResponse ? tweetsResponse.tweets.length : 0}
+                    dataLength={tweetsResponse ? (tweetsResponse as any).tweets.length : 0}
                     next={() => fetchNextPage()}
                     hasMore={!!hasNextPage}
                     loader={<CircularLoading />}
                 >
-                    <Tweets tweets={tweetsResponse && tweetsResponse.tweets} />
+                    <Tweets tweets={tweetsResponse && (tweetsResponse as any).tweets} />
                 </InfiniteScroll>
             )}
         </main>

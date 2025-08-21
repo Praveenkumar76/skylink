@@ -1,22 +1,125 @@
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
-
 import Tweets from "@/components/tweet/Tweets";
-import { getUserMedia } from "@/utilities/fetch";
-import CircularLoading from "@/components/misc/CircularLoading";
-import NotFound from "@/app/not-found";
+import NotFound from "@/components/misc/NotFound";
 import NothingToShow from "@/components/misc/NothingToShow";
+import { prisma } from "@/prisma/client";
 
-export default function MediaPage({ params: { username } }: { params: { username: string } }) {
-    const { isLoading, data } = useQuery({
-        queryKey: ["tweets", username, "media"],
-        queryFn: () => getUserMedia(username),
+export default async function MediaPage({ params }: { params: Promise<{ username: string }> }) {
+    const { username } = await params;
+    const tweets = await prisma.tweet.findMany({
+        where: {
+            author: { username },
+            isRetweet: false,
+            NOT: { photoUrl: null },
+            photoUrl: { not: "" },
+        },
+        include: {
+            author: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true,
+                    photoUrl: true,
+                    isPremium: true,
+                },
+            },
+            likedBy: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true,
+                    isPremium: true,
+                    photoUrl: true,
+                    description: true,
+                },
+            },
+            retweetedBy: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true,
+                    isPremium: true,
+                    photoUrl: true,
+                    description: true,
+                },
+            },
+            retweetOf: {
+                select: {
+                    id: true,
+                    author: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true,
+                            isPremium: true,
+                            photoUrl: true,
+                            description: true,
+                        },
+                    },
+                    authorId: true,
+                    createdAt: true,
+                    likedBy: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true,
+                            isPremium: true,
+                            photoUrl: true,
+                            description: true,
+                        },
+                    },
+                    retweetedBy: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true,
+                            isPremium: true,
+                            photoUrl: true,
+                            description: true,
+                        },
+                    },
+                    photoUrl: true,
+                    text: true,
+                    isReply: true,
+                    repliedTo: {
+                        select: {
+                            id: true,
+                            author: {
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    name: true,
+                                    isPremium: true,
+                                    photoUrl: true,
+                                    description: true,
+                                },
+                            },
+                        },
+                    },
+                    replies: { select: { authorId: true } },
+                },
+            },
+            replies: { select: { id: true } },
+            repliedTo: {
+                select: {
+                    id: true,
+                    author: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true,
+                            isPremium: true,
+                            photoUrl: true,
+                            description: true,
+                        },
+                    },
+                },
+            },
+        },
+        orderBy: [{ createdAt: "desc" }],
     });
 
-    if (!isLoading && !data.tweets) return NotFound();
+    if (!tweets) return <NotFound />;
+    if (tweets.length === 0) return <NothingToShow />;
 
-    if (data && data.tweets.length === 0) return NothingToShow();
-
-    return <>{isLoading ? <CircularLoading /> : <Tweets tweets={data.tweets} />}</>;
+    return <Tweets tweets={tweets as any} />;
 }

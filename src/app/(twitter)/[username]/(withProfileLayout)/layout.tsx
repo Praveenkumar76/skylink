@@ -1,31 +1,85 @@
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
-
-import NotFound from "@/app/not-found";
 import Profile from "@/components/user/Profile";
-import CircularLoading from "@/components/misc/CircularLoading";
-import { getUser } from "@/utilities/fetch";
+import { prisma } from "@/prisma/client";
+import NotFound from "@/components/misc/NotFound";
 
-export default function ProfileLayout({
+export default async function ProfileLayout({
     children,
-    params: { username },
+    params,
 }: {
     children: React.ReactNode;
-    params: { username: string };
+    params: Promise<{ username: string }>;
 }) {
-    const { isLoading, isFetched, data } = useQuery({
-        queryKey: ["users", username],
-        queryFn: () => getUser(username),
+    const { username } = await params;
+    const user = await prisma.user.findUnique({
+        where: { username },
+        select: {
+            id: true,
+            name: true,
+            username: true,
+            createdAt: true,
+            updatedAt: true,
+            description: true,
+            location: true,
+            website: true,
+            isPremium: true,
+            photoUrl: true,
+            headerUrl: true,
+            followers: {
+                select: {
+                    followerId: true,
+                    followingId: true,
+                    follower: {
+                        select: {
+                            id: true,
+                            name: true,
+                            username: true,
+                            description: true,
+                            location: true,
+                            website: true,
+                            isPremium: true,
+                            createdAt: true,
+                            updatedAt: true,
+                            photoUrl: true,
+                            headerUrl: true,
+                        },
+                    },
+                },
+            },
+            following: {
+                select: {
+                    followerId: true,
+                    followingId: true,
+                    following: {
+                        select: {
+                            id: true,
+                            name: true,
+                            username: true,
+                            description: true,
+                            location: true,
+                            website: true,
+                            isPremium: true,
+                            createdAt: true,
+                            updatedAt: true,
+                            photoUrl: true,
+                            headerUrl: true,
+                        },
+                    },
+                },
+            },
+            _count: {
+                select: {
+                    followers: true,
+                    following: true,
+                },
+            },
+        },
     });
 
-    if (isLoading) return <CircularLoading />;
-
-    if (isFetched && !data.user) return NotFound();
+    if (!user) return <NotFound />;
 
     return (
         <div className="profile-layout">
-            {isFetched && <Profile profile={data.user} />}
+            <Profile profile={user as any} />
             {children}
         </div>
     );

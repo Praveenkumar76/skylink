@@ -62,7 +62,7 @@ export default function NewMessageDialog({ open, handleNewMessageClose, token, r
         validationSchema: validationSchema,
         onSubmit: async (values, { resetForm }) => {
             if (photoFile) {
-                const path: string | void = await uploadFile(photoFile);
+                const path: string | null = await uploadFile(photoFile, "chat");
                 if (!path) throw new Error("Error uploading image.");
                 values.photoUrl = path;
                 setPhotoFile(null);

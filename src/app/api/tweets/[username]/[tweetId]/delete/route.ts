@@ -5,11 +5,11 @@ import { prisma } from "@/prisma/client";
 import { verifyJwtToken } from "@/utilities/auth";
 import { UserProps } from "@/types/UserProps";
 
-export async function POST(request: NextRequest, { params: { tweetId } }: { params: { tweetId: string } }) {
+export async function POST(request: NextRequest, context: { params: Promise<{ tweetId: string }> }) {
+    const { tweetId } = await context.params;
     const tokenOwnerId = await request.json();
 
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 
     if (!verifiedToken)

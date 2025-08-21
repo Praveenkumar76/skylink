@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import { prisma } from "@/prisma/client";
 
-export async function GET(request: NextRequest, { params: { tweetId } }: { params: { tweetId: string } }) {
+// The context contains params for both username and tweetId from the URL structure.
+export async function GET(request: NextRequest, context: { params: Promise<{ username: string; tweetId: string }> }) {
+    const { tweetId } = await context.params;
+
     try {
         const tweet = await prisma.tweet.findUnique({
             where: {
+                // Use the correctly destructured 'tweetId' variable here
                 id: tweetId,
             },
+            // The include block was already correct.
             include: {
                 author: {
                     select: {
@@ -27,16 +31,6 @@ export async function GET(request: NextRequest, { params: { tweetId } }: { param
                         description: true,
                         photoUrl: true,
                         isPremium: true,
-                        followers: {
-                            select: {
-                                id: true,
-                                username: true,
-                                name: true,
-                                isPremium: true,
-                                photoUrl: true,
-                                description: true,
-                            },
-                        },
                     },
                 },
                 retweetedBy: {
@@ -47,16 +41,6 @@ export async function GET(request: NextRequest, { params: { tweetId } }: { param
                         description: true,
                         photoUrl: true,
                         isPremium: true,
-                        followers: {
-                            select: {
-                                id: true,
-                                username: true,
-                                name: true,
-                                isPremium: true,
-                                photoUrl: true,
-                                description: true,
-                            },
-                        },
                     },
                 },
                 retweetOf: {

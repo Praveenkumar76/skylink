@@ -7,7 +7,8 @@ import CircularLoading from "@/components/misc/CircularLoading";
 import EditProfile from "@/components/user/EditProfile";
 import BackToArrow from "@/components/misc/BackToArrow";
 
-export default function EditPage({ params: { username } }: { params: { username: string } }) {
+export default function EditPage(props: any) {
+    const username: string = props?.params?.username;
     const { token, isPending, refreshToken } = useContext(AuthContext);
 
     if (isPending) return <CircularLoading />;

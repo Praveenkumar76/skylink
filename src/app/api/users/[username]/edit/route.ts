@@ -6,11 +6,11 @@ import { prisma } from "@/prisma/client";
 import { getJwtSecretKey, verifyJwtToken } from "@/utilities/auth";
 import { UserProps } from "@/types/UserProps";
 
-export async function POST(request: NextRequest, { params: { username } }: { params: { username: string } }) {
+export async function POST(request: NextRequest, context: { params: Promise<{ username: string }> }) {
+    const { username } = await context.params;
     const data = await request.json();
 
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 
     if (!verifiedToken)

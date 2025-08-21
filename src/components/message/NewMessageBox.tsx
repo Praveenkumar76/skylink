@@ -65,7 +65,7 @@ export default function NewMessageBox({ messagedUsername, token, setFreshMessage
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             if (photoFile) {
-                const path: string | void = await uploadFile(photoFile);
+                const path: string | null = await uploadFile(photoFile, "chat");
                 if (!path) throw new Error("Error uploading image.");
                 values.photoUrl = path;
                 setPhotoFile(null);

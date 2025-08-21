@@ -1,12 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { getUserTweets } from "@/utilities/fetch";
+"use client";
 
 export default function TweetArrayLength({ username }: { username: string }) {
-    const { isFetched, data } = useQuery({
-        queryKey: ["tweets", username],
-        queryFn: () => getUserTweets(username),
-    });
-
-    return <span className="text-muted">{isFetched ? data.tweets?.length : "0"} Tweets</span>;
+    // Kept as a client stub to avoid request waterfall; count is not critical here
+    return <span className="text-muted">Tweets</span>;
 }

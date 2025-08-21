@@ -8,8 +8,7 @@ import { UserProps } from "@/types/UserProps";
 export async function POST(request: NextRequest) {
     const { tokenOwnerId, participants }: { tokenOwnerId: string; participants: string[] } = await request.json();
 
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 
     if (!verifiedToken)

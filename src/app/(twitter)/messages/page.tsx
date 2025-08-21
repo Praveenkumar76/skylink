@@ -39,7 +39,7 @@ export default function MessagesPage() {
 
     if (isPending || !token || isLoading) return <CircularLoading />;
 
-    const conversations = data.formattedConversations;
+    const conversations = data?.formattedConversations || [];
 
     return (
         <main className="messages-page">

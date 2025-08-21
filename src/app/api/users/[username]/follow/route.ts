@@ -6,11 +6,11 @@ import { verifyJwtToken } from "@/utilities/auth";
 import { createNotification } from "@/utilities/fetch";
 import { UserProps } from "@/types/UserProps";
 
-export async function POST(request: NextRequest, { params: { username } }: { params: { username: string } }) {
+export async function POST(request: NextRequest, context: { params: Promise<{ username: string }> }) {
+    const { username } = await context.params;
     const tokenOwnerId = await request.json();
 
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 
     const secret = process.env.CREATION_SECRET_KEY;
@@ -29,16 +29,15 @@ export async function POST(request: NextRequest, { params: { username } }: { par
         return NextResponse.json({ success: false, message: "You are not authorized to perform this action." });
 
     try {
-        await prisma.user.update({
-            where: {
-                username: username,
-            },
+        const followedUser = await prisma.user.findUnique({ where: { username } });
+        if (!followedUser) {
+            return NextResponse.json({ success: false, message: "User not found." });
+        }
+
+        await prisma.follows.create({
             data: {
-                followers: {
-                    connect: {
-                        id: tokenOwnerId,
-                    },
-                },
+                followerId: tokenOwnerId,
+                followingId: followedUser.id,
             },
         });
 

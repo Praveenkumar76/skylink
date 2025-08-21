@@ -69,12 +69,12 @@ export default function EditProfile({ profile, refreshToken }: { profile: UserPr
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             if (headerFile) {
-                const path: string | void = await uploadFile(headerFile);
+                const path: string | null = await uploadFile(headerFile, "profiles");
                 if (!path) throw new Error("Header upload failed.");
                 values.headerUrl = path;
             }
             if (photoFile) {
-                const path: string | void = await uploadFile(photoFile);
+                const path: string | null = await uploadFile(photoFile, "profiles");
                 if (!path) throw new Error("Photo upload failed.");
                 values.photoUrl = path;
             }
@@ -93,7 +93,7 @@ export default function EditProfile({ profile, refreshToken }: { profile: UserPr
                 open: true,
             });
             refreshToken();
-            queryClient.invalidateQueries(["users", profile.username]);
+            queryClient.invalidateQueries({ queryKey: ["users", profile.username] });
         },
     });
 
@@ -123,7 +123,7 @@ export default function EditProfile({ profile, refreshToken }: { profile: UserPr
         setIsBlueLoading(false);
         setIsBlueOpen(false);
         refreshToken();
-        queryClient.invalidateQueries(["users", profile.username]);
+        queryClient.invalidateQueries({ queryKey: ["users", profile.username] });
     };
 
     return (

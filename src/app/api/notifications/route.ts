@@ -6,8 +6,7 @@ import { verifyJwtToken } from "@/utilities/auth";
 import { UserProps } from "@/types/UserProps";
 
 export async function GET(request: NextRequest) {
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 
     if (!verifiedToken)

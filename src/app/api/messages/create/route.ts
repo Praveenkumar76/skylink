@@ -10,7 +10,7 @@ import { UserProps } from "@/types/UserProps";
 export async function POST(request: NextRequest) {
     const { recipient, sender, text, photoUrl } = await request.json();
 
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
     const verifiedToken: UserProps = token && (await verifyJwtToken(token));
 

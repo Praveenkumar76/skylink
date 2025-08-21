@@ -23,7 +23,7 @@ export default function NotificationsPage() {
     const mutation = useMutation({
         mutationFn: markNotificationsRead,
         onSuccess: () => {
-            queryClient.invalidateQueries(["notifications"]);
+            queryClient.invalidateQueries({ queryKey: ["notifications"] });
         },
         onError: (error) => console.log(error),
     });
@@ -33,7 +33,7 @@ export default function NotificationsPage() {
     };
 
     useEffect(() => {
-        if (isFetched && data.notifications.filter((notification: NotificationProps) => !notification.isRead).length > 0) {
+        if (isFetched && data?.notifications?.filter((notification: NotificationProps) => !notification.isRead).length > 0) {
             const countdownForMarkAsRead = setTimeout(() => {
                 handleNotificationsRead();
             }, 1000);
@@ -42,18 +42,18 @@ export default function NotificationsPage() {
                 clearTimeout(countdownForMarkAsRead);
             };
         }
-    }, []);
+    }, [isFetched, data]);
 
     if (isPending || !token || isLoading) return <CircularLoading />;
 
     return (
         <main>
             <h1 className="page-name">Notifications</h1>
-            {isFetched && data.notifications.length === 0 ? (
+            {isFetched && data?.notifications?.length === 0 ? (
                 <NothingToShow />
             ) : (
                 <div className="notifications-wrapper">
-                    {data.notifications.map((notification: NotificationProps) => (
+                    {data?.notifications?.map((notification: NotificationProps) => (
                         <Notification key={notification.id} notification={notification} token={token} />
                     ))}
                 </div>

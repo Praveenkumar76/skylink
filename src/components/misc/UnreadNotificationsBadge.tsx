@@ -5,7 +5,10 @@ import { getNotifications } from "@/utilities/fetch";
 import { NotificationProps } from "@/types/NotificationProps";
 
 export default function UnreadNotificationsBadge() {
-    const { data } = useQuery(["notifications"], getNotifications);
+    const { data } = useQuery({
+        queryKey: ["notifications"],
+        queryFn: getNotifications,
+    });
 
     const lengthOfUnreadNotifications =
         data?.notifications?.filter((notification: NotificationProps) => !notification.isRead)?.length ?? 0;

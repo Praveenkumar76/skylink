@@ -25,7 +25,7 @@ export default function Conversation({ conversation, token, handleConversations 
         onSuccess: () => {
             setIsConfirmationOpen(false);
             setIsDeleting(false);
-            queryClient.invalidateQueries(["messages", token.username]);
+            queryClient.invalidateQueries({ queryKey: ["messages", token.username] });
         },
         onError: (error) => console.log(error),
     });

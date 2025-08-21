@@ -10,11 +10,27 @@ export type UserProps = {
     updatedAt: Date;
     photoUrl: string;
     headerUrl: string;
-    followers: UserProps[];
-    following: UserProps[];
+};
+
+export type UserCounts = {
+    followers: number;
+    following: number;
+};
+
+export type FollowEdge = {
+    followerId: string;
+    followingId: string;
+    follower?: UserProps;
+    following?: UserProps;
 };
 
 export type UserResponse = {
     success: boolean;
-    user: UserProps;
+    user: any;
+};
+
+export type ProfileWithFollows = UserProps & {
+    _count: UserCounts;
+    followers: FollowEdge[];
+    following: FollowEdge[];
 };

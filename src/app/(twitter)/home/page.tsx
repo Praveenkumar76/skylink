@@ -25,7 +25,7 @@ export default function HomePage() {
             <h1 className="page-name">Home</h1>
             {token && <NewTweet token={token} />}
             {data && data.tweets.length === 0 && <NothingToShow />}
-            <Tweets tweets={data.tweets} />
+            <Tweets tweets={data?.tweets ?? []} />
         </main>
     );
 }

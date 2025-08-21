@@ -9,6 +9,15 @@ datasource db {
     directUrl         = env("DIRECT_DATABASE_URL")
 }
 
+model Follows {
+  followerId  String
+  followingId String
+  follower    User   @relation("Following", fields: [followerId], references: [id])
+  following   User   @relation("Followers", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+}
+
 model User {
     id               String         @id @default(uuid())
     name             String?        @db.VarChar(50)
@@ -22,14 +31,14 @@ model User {
     isPremium        Boolean        @default(false)
     createdAt        DateTime       @default(now())
     updatedAt        DateTime       @default(now()) @updatedAt
-    createdTweets    Tweet[]        @relation("userTweets")
-    retweets         Tweet[]        @relation("userRetweets")
-    likedTweets      Tweet[]        @relation("userLikes")
-    following        User[]         @relation("userFollows")
-    followers        User[]         @relation("userFollows")
-    sentMessages     Message[]      @relation("userMessagesSent")
-    receivedMessages Message[]      @relation("userMessagesRecieved")
-    notifications    Notification[]
+    createdTweets    Tweet[]  @relation("userTweets")
+  retweets         Tweet[]  @relation("userRetweets")
+  likedTweets      Tweet[]  @relation("userLikes")
+  sentMessages     Message[] @relation("userMessagesSent")
+  receivedMessages Message[] @relation("userMessagesRecieved")
+  notifications    Notification[]
+  following        Follows[] @relation("Following")
+  followers        Follows[] @relation("Followers")
 }
 
 model Tweet {

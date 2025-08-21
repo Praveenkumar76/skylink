@@ -1,19 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-
 import { prisma } from "@/prisma/client";
 import { verifyJwtToken } from "@/utilities/auth";
 import { UserProps } from "@/types/UserProps";
 
 export async function GET(request: NextRequest) {
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value;
-    const verifiedToken: UserProps = token && (await verifyJwtToken(token));
+    const token = (await cookies()).get("token")?.value;
+    const verifiedToken: UserProps | null = token ? await verifyJwtToken(token) : null;
 
     if (!verifiedToken)
         return NextResponse.json({ success: false, message: "You are not authorized to perform this action." });
 
     try {
+        // Corrected: Use 'prisma.follows' which corresponds to the 'Follows' model.
+        const followEdges = await prisma.follows.findMany({
+            where: { followerId: verifiedToken.id },
+            select: { followingId: true },
+        });
+
+        // Add the correct type to the parameter 'e'
+        const followingUserIds = followEdges.map((e: { followingId: string }) => e.followingId);
+
         const tweets = await prisma.tweet.findMany({
             where: {
                 OR: [
@@ -21,12 +28,8 @@ export async function GET(request: NextRequest) {
                         authorId: verifiedToken.id,
                     },
                     {
-                        author: {
-                            followers: {
-                                some: {
-                                    id: verifiedToken.id,
-                                },
-                            },
+                        authorId: {
+                            in: followingUserIds,
                         },
                     },
                 ],

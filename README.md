@@ -1,12 +1,6 @@
-# Twitter Clone (Full-stack Next.js 13+)
-
-Introducing a comprehensive clone of [Twitter](https://twitter.com), with a familiar interface and a range of essential features.
+# SkyLink (Full-stack Next.js 13+)
 
 Created with **Next.js 13+**, **Supabase** and **PostgreSQL**. Deployed on [**Vercel**](https://vercel.com/).
-
-## ⮕ [Live preview](https://twitter-next13.vercel.app/)
-
-### ➡ FYI: Supabase updated their DB settings recently (January 2024), so environment variables from examples may look different when you try it out.
 
 ---
 

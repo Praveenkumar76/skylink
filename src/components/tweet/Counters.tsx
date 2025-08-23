@@ -8,6 +8,7 @@ import { scrollToBottom } from "@/utilities/misc/scrollToBottom";
 import CustomSnackbar from "../misc/CustomSnackbar";
 import { SnackbarProps } from "@/types/SnackbarProps";
 import { UserProps } from "@/types/UserProps";
+import { FaComment, FaRetweet, FaHeart } from "react-icons/fa";
 
 export default function Counters({ tweet }: { tweet: TweetProps }) {
     const [dialogType, setDialogType] = useState("");
@@ -40,24 +41,21 @@ export default function Counters({ tweet }: { tweet: TweetProps }) {
                 <div className="tweet-stats">
                     <div className="counters">
                         {tweet.replies.length > 0 && (
-                            <button className="counter-btn" onClick={scrollToBottom}>
-                                <span className="count">
-                                    {tweet.replies.length} <span className="text-muted">Replies</span>
-                                </span>
+                            <button className="counter-btn" onClick={() => handleDialogOpen("replies")}>
+                                <FaComment />
+                                {tweet.replies.length} <span className="text-muted">Replies</span>
                             </button>
                         )}
                         {tweet.retweetedBy.length > 0 && (
                             <button className="counter-btn" onClick={() => handleDialogOpen("retweets")}>
-                                <span className="count">
-                                    {tweet.retweetedBy.length} <span className="text-muted">Retweets</span>
-                                </span>
+                                <FaRetweet />
+                                {tweet.retweetedBy.length} <span className="text-muted">Shares</span>
                             </button>
                         )}
                         {tweet.likedBy.length > 0 && (
                             <button className="counter-btn" onClick={() => handleDialogOpen("likes")}>
-                                <span className="count">
-                                    {tweet.likedBy.length} <span className="text-muted">Likes</span>
-                                </span>
+                                <FaHeart />
+                                {tweet.likedBy.length} <span className="text-muted">Likes</span>
                             </button>
                         )}
                     </div>
@@ -66,7 +64,7 @@ export default function Counters({ tweet }: { tweet: TweetProps }) {
             {isDialogOpen && (
                 <Dialog className="dialog" open={isDialogOpen} onClose={handleDialogClose} fullWidth maxWidth="xs">
                     <DialogTitle className="title">
-                        {dialogType === "likes" ? "Liked by" : dialogType === "retweets" ? "Retweeted by" : ""}
+                        {dialogType === "likes" ? "Liked by" : dialogType === "retweets" ? "Shared by" : ""}
                     </DialogTitle>
                     <DialogContent sx={{ paddingX: 0 }}>
                         <div className="user-list">

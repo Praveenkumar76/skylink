@@ -5,7 +5,15 @@ import "../styles/globals.scss";
 import Providers from "./providers";
 
 export const metadata = {
-    title: "Fettan | Twitter",
+    title: "SkyLink | Praveen Kumar",
+    icons: {
+        icon: [
+            { url: '/assets/favicon.svg', type: 'image/svg+xml' },
+            { url: '/assets/favicon.png', type: 'image/png' }
+        ],
+        shortcut: '/assets/favicon.svg',
+        apple: '/assets/favicon.png',
+    },
 };
 
 const roboto = localFont({

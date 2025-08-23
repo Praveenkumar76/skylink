@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { AiFillTwitterCircle } from "react-icons/ai";
+import SkyLinkIcon from "../misc/SkyLinkIcon";
 
 import { TweetProps } from "@/types/TweetProps";
 import { formatDate, formatDateExtended } from "@/utilities/date";
@@ -100,7 +100,7 @@ export default function Tweet({ tweet }: { tweet: TweetProps }) {
                             {displayedTweet.author.name !== "" ? displayedTweet.author.name : displayedTweet.author.username}
                             {displayedTweet.author.isPremium && (
                                 <span className="blue-tick" data-blue="Verified Blue">
-                                    <AiFillTwitterCircle />
+                                    <SkyLinkIcon size={20} />
                                 </span>
                             )}
                         </span>

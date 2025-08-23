@@ -1,5 +1,6 @@
 const verifyTokenFromServer = async (token: string) => {
-    const HOST_URL = process.env.NEXT_PUBLIC_HOST_URL;
+    // Use environment variable or fallback to localhost for development
+    const HOST_URL = process.env.NEXT_PUBLIC_HOST_URL || 'http://localhost:3000';
 
     const response = await fetch(`${HOST_URL}/api/auth/verify`, {
         method: "POST",
@@ -18,7 +19,12 @@ export const getJwtSecretKey = () => {
 };
 
 export const verifyJwtToken = async (token: string) => {
-    const response = await verifyTokenFromServer(token);
-    if (!response) return null;
-    return response;
+    try {
+        const response = await verifyTokenFromServer(token);
+        if (!response) return null;
+        return response;
+    } catch (error) {
+        console.error('Token verification failed:', error);
+        return null;
+    }
 };

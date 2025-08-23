@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Avatar, Menu, MenuItem, Popover, Tooltip } from "@mui/material";
-import { AiFillTwitterCircle } from "react-icons/ai";
+import SkyLinkIcon from "../misc/SkyLinkIcon";
 import { RxDotsHorizontal } from "react-icons/rx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -88,7 +88,7 @@ export default function Conversation({ conversation, token, handleConversations 
                             {name !== "" ? name : username}
                             {isPremium && (
                                 <span className="blue-tick" data-blue="Verified Blue">
-                                    <AiFillTwitterCircle />
+                                    <SkyLinkIcon size={20} />
                                 </span>
                             )}
                         </span>

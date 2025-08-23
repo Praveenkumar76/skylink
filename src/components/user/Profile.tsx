@@ -8,9 +8,10 @@ import { FaArrowLeft, FaRegEnvelope } from "react-icons/fa";
 import { Avatar, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { BiCalendarCheck } from "react-icons/bi";
 import { GoLocation } from "react-icons/go";
-import { AiFillTwitterCircle, AiOutlineLink } from "react-icons/ai";
+import { AiOutlineLink } from "react-icons/ai";
 
 import { formatDateForProfile } from "@/utilities/date";
+import SkyLinkIcon from "../misc/SkyLinkIcon";
 import { AuthContext } from "@/app/(twitter)/layout";
 import { ProfileWithFollows, UserProps } from "@/types/UserProps";
 import TweetArrayLength from "../tweet/TweetArrayLength";
@@ -124,7 +125,7 @@ export default function Profile({ profile }: { profile: ProfileWithFollows }) {
                             {profile.name !== "" ? profile.name : profile.username}
                             {profile.isPremium && (
                                 <span className="blue-tick" data-blue="Verified Blue">
-                                    <AiFillTwitterCircle />
+                                    <SkyLinkIcon size={20} />
                                 </span>
                             )}
                         </h1>

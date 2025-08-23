@@ -4,29 +4,29 @@ Created with **Next.js 13+**, **Supabase** and **PostgreSQL**. Deployed on [**Ve
 
 ---
 
-`Secret key for Twitter Blue: thanksforcaring`
+`Secret key for SkyLink Premium: thanksforcaring`
 
 ---
 
 ## Features
 
 -   **Profiles**: Users can create their own profiles, add a profile picture, and customize their bio to express their personality and interests.
--   **Tweets and Replies**: Just like Twitter, users can compose and share tweets of up to a certain character limit, allowing them to share their thoughts, ideas, or any other content with their followers.
--   **Following/Followers**: Users can follow other users to see their tweets on their timeline and gain followers who are interested in their content.
--   **Likes/Retweets**: Users can engage with tweets by liking them to show appreciation or retweeting them to share them with their own followers. Also undo retweets and unlike support.
--   **Notifications**: Users receive notifications when someone likes or retweets their tweets, when they gain new followers, or when they are mentioned in a post by another user.
--   **Search**: Users can search for specific tweets or accounts to find relevant content or connect with specific users.
+-   **Posts and Replies**: Just like SkyLink, users can compose and share posts of up to a certain character limit, allowing them to share their thoughts, ideas, or any other content with their followers.
+-   **Following/Followers**: Users can follow other users to see their posts on their timeline and gain followers who are interested in their content.
+-   **Likes/Shares**: Users can engage with posts by liking them to show appreciation or sharing them to share them with their own followers. Also undo shares and unlike support.
+-   **Notifications**: Users receive notifications when someone likes or shares their posts, when they gain new followers, or when they are mentioned in a post by another user.
+-   **Search**: Users can search for specific posts or accounts to find relevant content or connect with specific users.
 -   **Direct Messaging**: Users can send private messages to other users, allowing for one-on-one conversations and interactions.
--   **Twitter Blue**: Users can get premium status by entering a secret code, getting an icon with their name.
--   **Emoji Support**: Users can easily add emojis to their tweets and replies, enhancing expression and engagement.
+-   **SkyLink Premium**: Users can get premium status by entering a secret code, getting an icon with their name.
+-   **Emoji Support**: Users can easily add emojis to their posts and replies, enhancing expression and engagement.
 -   **User Authentication and Security**: Custom user authentication with hooks, bcrypt, JWT. Access control, ensuring secure login and protected user data.
--   **Real-time Data Fetching**: Implement real-time updates with react-query, allowing users to see new tweets, likes, and retweets without manually refreshing the page.
--   **Image Support**: Users can upload images with their tweets, replies, profile and header pictures and direct messages, enhancing visual content sharing.
+-   **Real-time Data Fetching**: Implement real-time updates with react-query, allowing users to see new posts, likes, and shares without manually refreshing the page.
+-   **Image Support**: Users can upload images with their posts, replies, profile and header pictures and direct messages, enhancing visual content sharing.
 -   **Infinite Scroll**: Infinite scrolling, providing a seamless browsing experience for users as they explore their timeline.
 -   **Date and Time Formatting**: Formatting timestamps and display them in a user-friendly manner, such as relative time (e.g., "5 minutes ago").
--   **Deleting**: Users can delete their own tweets, replies and retweets. Also unlike tweets.
+-   **Deleting**: Users can delete their own posts, replies and shares. Also unlike posts.
 -   Dark and Light mode.
--   Optimistic updates on likes, retweets, followings and so on.
+-   Optimistic updates on likes, shares, followings and so on.
 -   Full-Stack Next.js (13+) App directory advantages.
 -   Responsive design.
 

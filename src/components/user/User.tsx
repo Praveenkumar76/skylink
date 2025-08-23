@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@mui/material";
 import Link from "next/link";
-import { AiFillTwitterCircle } from "react-icons/ai";
+import SkyLinkIcon from "../misc/SkyLinkIcon";
 
 import { UserProps } from "@/types/UserProps";
 import { AuthContext } from "@/app/(twitter)/layout";
@@ -36,7 +36,7 @@ export default function User({ user }: { user: UserProps }) {
                                 {user.name !== "" ? user.name : user.username}
                                 {user.isPremium && (
                                     <span className="blue-tick" data-blue="Verified Blue">
-                                        <AiFillTwitterCircle />
+                                        <SkyLinkIcon size={20} />
                                     </span>
                                 )}
                             </span>

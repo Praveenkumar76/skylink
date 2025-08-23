@@ -50,7 +50,7 @@ export default async function SingleTweetPage({ params }: { params: Promise<{ us
 
     let backToProps = { title: username, url: `/${username}` } as { title: string; url: string };
     if (data?.isReply && data.repliedTo) {
-        backToProps = { title: "Tweet", url: `/${data.repliedTo.author.username}/tweets/${data.repliedTo.id}` };
+        backToProps = { title: "Post", url: `/${data.repliedTo.author.username}/tweets/${data.repliedTo.id}` };
     }
 
     return (

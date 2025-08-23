@@ -151,7 +151,7 @@ export default function Notification({ notification, token }: { notification: No
                     <GiPartyPopper />
                 </div>
                 <div className={!notification.isRead ? "bold" : ""}>
-                    Welcome to the Twitter! <br />
+                    Welcome to SkyLink! <br />
                     Start exploring and sharing your thoughts with the world.
                 </div>
             </div>

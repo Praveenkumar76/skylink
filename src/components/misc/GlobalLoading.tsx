@@ -1,9 +1,9 @@
-import { FaTwitter } from "react-icons/fa";
+import SkyLinkIcon from "./SkyLinkIcon";
 
 export default function GlobalLoading() {
     return (
-        <div className="global-loading-wrapper">
-            <FaTwitter className="bird" />
+        <div className="global-loading">
+            <SkyLinkIcon className="bird" size={48} />
         </div>
     );
 }

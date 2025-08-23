@@ -1,6 +1,6 @@
 import { Avatar } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { AiFillTwitterCircle } from "react-icons/ai";
+import SkyLinkIcon from "../misc/SkyLinkIcon";
 
 import { getUser } from "@/utilities/fetch";
 import { getFullURL } from "@/utilities/misc/getFullURL";
@@ -37,7 +37,7 @@ export default function ProfileCard({ username, token }: { username: string; tok
                     {data.user.name !== "" ? data.user.name : data.user.username}
                     {data.user.isPremium && (
                         <span className="blue-tick" data-blue="Verified Blue">
-                            <AiFillTwitterCircle />
+                            <SkyLinkIcon size={20} />
                         </span>
                     )}
                 </h1>

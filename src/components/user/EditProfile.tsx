@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { useQueryClient } from "@tanstack/react-query";
 import { Avatar, TextField } from "@mui/material";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import { FaTwitter } from "react-icons/fa";
+import SkyLinkIcon from "../misc/SkyLinkIcon";
 import * as yup from "yup";
 import Image from "next/image";
 
@@ -131,7 +131,7 @@ export default function EditProfile({ profile, refreshToken }: { profile: UserPr
             <div className="profile-header">
                 <div className="get-blue">
                     <button onClick={() => setIsBlueOpen(true)}>
-                        Twitter Blue? <FaTwitter />
+                        SkyLink Premium? <SkyLinkIcon size={20} />
                     </button>
                 </div>
                 <Image
@@ -265,10 +265,10 @@ export default function EditProfile({ profile, refreshToken }: { profile: UserPr
                         ) : (
                             <>
                                 <h1>
-                                    Want Twitter Blue? <FaTwitter />
+                                    Want SkyLink Premium? <SkyLinkIcon size={24} />
                                 </h1>
                                 <p>
-                                    With Twitter Blue, you will have a little twitter bird next you your name, thats it! Dive
+                                    With SkyLink Premium, you will have a little sky bird next you your name, thats it! Dive
                                     right in!
                                 </p>
                                 <p>

@@ -1,18 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { useContext, useState } from "react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, Menu, MenuItem } from "@mui/material";
-import { FaHome, FaBell, FaEnvelope, FaUser, FaCog, FaHashtag, FaEllipsisH, FaTwitter } from "react-icons/fa";
-import { AiFillTwitterCircle } from "react-icons/ai";
+import { FaHome, FaBell, FaEnvelope, FaUser, FaCog, FaHashtag, FaEllipsisH } from "react-icons/fa";
 
+import { AuthContext } from "@/app/(twitter)/layout";
 import NewTweetDialog from "../dialog/NewTweetDialog";
 import LogOutDialog from "../dialog/LogOutDialog";
 import { logout } from "@/utilities/fetch";
-import { AuthContext } from "@/app/(twitter)/layout";
 import { getFullURL } from "@/utilities/misc/getFullURL";
 import UnreadNotificationsBadge from "../misc/UnreadNotificationsBadge";
+import SkyLinkIcon from "../misc/SkyLinkIcon";
 
 export default function LeftSidebar() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -56,7 +56,7 @@ export default function LeftSidebar() {
             <aside className="left-sidebar">
                 <div className="fixed">
                     <Link href="/explore" className="twitter-icon">
-                        <FaTwitter />
+                        <SkyLinkIcon size={28} />
                     </Link>
                     <nav>
                         <ul>
@@ -124,7 +124,7 @@ export default function LeftSidebar() {
                     {token && (
                         <>
                             <button onClick={handleNewTweetClick} className="btn btn-tweet">
-                                Tweet
+                                Post
                             </button>
                             <button onClick={handleAnchorClick} className="side-profile">
                                 <div>
@@ -139,7 +139,7 @@ export default function LeftSidebar() {
                                         {token.name !== "" ? token.name : token.username}
                                         {token.isPremium && (
                                             <span className="blue-tick" data-blue="Verified Blue">
-                                                <AiFillTwitterCircle />
+                                                <SkyLinkIcon size={20} />
                                             </span>
                                         )}
                                     </div>

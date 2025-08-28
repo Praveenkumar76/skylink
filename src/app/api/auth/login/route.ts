@@ -58,6 +58,9 @@ export async function POST(request: NextRequest) {
             name: "token",
             value: token,
             path: "/",
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
         });
 
         return response;

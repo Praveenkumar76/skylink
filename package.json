@@ -15,11 +15,12 @@
         "prisma",
         "tanstack"
     ],
-    "author": "Fatih Arapoğlu",
+    "author": "Praveen Kumar",
     "license": "MIT",
     "scripts": {
         "dev": "next dev",
-        "build": "npx prisma generate --schema=./src/prisma/schema.prisma && next build",
+        "build": "next build",
+        "build:netlify": "next build",
         "start": "next start",
         "lint": "next lint"
     },

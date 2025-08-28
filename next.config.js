@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    experimental: {
-        serverActions: {},
-    },
+    output: 'export',
+    trailingSlash: true,
     images: {
+        unoptimized: true,
         domains: ["zjpubvbqfagluanwtbjx.supabase.co"],
     },
     async headers() {

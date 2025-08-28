@@ -1,5 +1,4 @@
 [build]
-[build]
   command = "npx prisma migrate deploy --schema=./src/prisma/schema.prisma && npx prisma generate --schema=./src/prisma/schema.prisma && next build"
   publish = "out"
 

@@ -21,6 +21,7 @@
         "dev": "next dev",
         "build": "next build",
         "build:netlify": "next build",
+        "postinstall": "prisma generate --schema=./src/prisma/schema.prisma",
         "start": "next start",
         "lint": "next lint"
     },

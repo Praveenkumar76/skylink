@@ -1,12 +1,12 @@
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["jsonProtocol"]
+    binaryTargets   = ["debian-openssl-3.0.x", "native"]
 }
 
 datasource db {
     provider          = "postgresql"
     url               = env("DATABASE_URL")
-    directUrl         = env("DIRECT_DATABASE_URL")
 }
 
 model Follows {

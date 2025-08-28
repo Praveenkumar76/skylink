@@ -1,6 +1,6 @@
 const verifyTokenFromServer = async (token: string) => {
     // Use environment variable or fallback to localhost for development
-    const HOST_URL = process.env.NEXT_PUBLIC_HOST_URL || 'http://localhost:3000';
+    const HOST_URL = process.env.NEXT_PUBLIC_HOST_URL;
 
     const response = await fetch(`${HOST_URL}/api/auth/verify`, {
         method: "POST",

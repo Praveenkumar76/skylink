@@ -6,4 +6,6 @@ export type AuthProps = {
     token: VerifiedToken;
     isPending: boolean;
     refreshToken: () => Promise<void>;
+    forceRefresh: () => Promise<void>;
+    manualRefresh: () => Promise<void>;
 };

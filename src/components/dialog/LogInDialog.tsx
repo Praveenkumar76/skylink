@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTitle, TextField, InputAdornment } from "@mui/material";
@@ -10,9 +10,11 @@ import { logIn } from "@/utilities/fetch";
 import CircularLoading from "../misc/CircularLoading";
 import { SnackbarProps } from "@/types/SnackbarProps";
 import CustomSnackbar from "../misc/CustomSnackbar";
+import { AuthContext } from "@/app/(twitter)/layout";
 
 export default function LogInDialog({ open, handleLogInClose }: LogInDialogProps) {
     const [snackbar, setSnackbar] = useState<SnackbarProps>({ message: "", severity: "success", open: false });
+    const { forceRefresh } = useContext(AuthContext);
 
     const router = useRouter();
 
@@ -44,6 +46,11 @@ export default function LogInDialog({ open, handleLogInClose }: LogInDialogProps
             }
             resetForm();
             handleLogInClose();
+            
+            // Force refresh the authentication state before redirecting
+            await forceRefresh();
+            
+            // Redirect to explore page
             router.push("/explore");
         },
     });

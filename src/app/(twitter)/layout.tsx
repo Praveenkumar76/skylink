@@ -8,7 +8,13 @@ import RightSidebar from "@/components/layout/RightSidebar";
 import { AuthProps } from "@/types/TokenProps";
 import useAuth from "@/hooks/useAuth";
 
-const AuthContext = createContext<AuthProps>({ token: null, isPending: true, refreshToken: () => Promise.resolve() });
+const AuthContext = createContext<AuthProps>({ 
+    token: null, 
+    isPending: true, 
+    refreshToken: () => Promise.resolve(),
+    forceRefresh: () => Promise.resolve(),
+    manualRefresh: () => Promise.resolve()
+});
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
     const auth = useAuth();

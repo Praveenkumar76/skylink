@@ -16,7 +16,7 @@ export default function RightSidebar() {
     return (
         <aside className="right-sidebar">
             <div className="fixed">
-                <SkygenChatbotIcon />
+              <SkygenChatbotIcon />
                 <Search />
                 {token && <WhoToFollow />}
                 {token && <CompleteProfileReminder token={token} />}

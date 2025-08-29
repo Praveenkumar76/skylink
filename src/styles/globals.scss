@@ -2256,3 +2256,32 @@ button.icon-hoverable {
         }
     }
 }
+
+.skygen-chatbot-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    
+    &:hover {
+        transform: scale(1.1);
+        
+        .skygen-icon {
+            box-shadow: 0 0 20px rgba(29, 161, 242, 0.6);
+        }
+    }
+    
+    .skygen-icon {
+        border-radius: 50%;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 0 10px rgba(29, 161, 242, 0.3);
+        
+        &:hover {
+            box-shadow: 0 0 25px rgba(29, 161, 242, 0.8);
+        }
+    }
+}

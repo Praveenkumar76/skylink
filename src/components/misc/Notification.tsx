@@ -32,6 +32,9 @@ export default function Notification({ notification, token }: { notification: No
         <Popover
             sx={{
                 pointerEvents: "none",
+                "& .MuiPopover-paper": {
+                    pointerEvents: "auto",
+                },
             }}
             open={Boolean(anchorEl)}
             anchorEl={anchorEl}
@@ -45,6 +48,8 @@ export default function Notification({ notification, token }: { notification: No
             }}
             onClose={handlePopoverClose}
             disableRestoreFocus
+            disableAutoFocus
+            disableEnforceFocus
         >
             <ProfileCard username={content?.sender.username} token={token} />
         </Popover>

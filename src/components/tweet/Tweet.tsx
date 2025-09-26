@@ -179,6 +179,9 @@ export default function Tweet({ tweet }: { tweet: TweetProps }) {
             <Popover
                 sx={{
                     pointerEvents: "none",
+                    "& .MuiPopover-paper": {
+                        pointerEvents: "auto",
+                    },
                 }}
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
@@ -192,6 +195,8 @@ export default function Tweet({ tweet }: { tweet: TweetProps }) {
                 }}
                 onClose={handlePopoverClose}
                 disableRestoreFocus
+                disableAutoFocus
+                disableEnforceFocus
             >
                 <ProfileCard username={hoveredProfile} token={token} />
             </Popover>

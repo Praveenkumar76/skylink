@@ -116,6 +116,9 @@ export default function Conversation({ conversation, token, handleConversations 
             <Popover
                 sx={{
                     pointerEvents: "none",
+                    "& .MuiPopover-paper": {
+                        pointerEvents: "auto",
+                    },
                 }}
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
@@ -129,6 +132,8 @@ export default function Conversation({ conversation, token, handleConversations 
                 }}
                 onClose={handlePopoverClose}
                 disableRestoreFocus
+                disableAutoFocus
+                disableEnforceFocus
             >
                 <ProfileCard username={username} token={token} />
             </Popover>

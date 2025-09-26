@@ -1,0 +1,10 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 2L8 8L12 6L16 8L12 2Z" fill="currentColor"/>
+  <path d="M8 8L6 12L8 10L12 12L8 8Z" fill="currentColor"/>
+  <path d="M16 8L18 12L16 10L12 12L16 8Z" fill="currentColor"/>
+  <path d="M6 12L4 16L6 14L8 16L6 12Z" fill="currentColor"/>
+  <path d="M18 12L20 16L18 14L16 16L18 12Z" fill="currentColor"/>
+  <path d="M4 16L2 20L4 18L6 20L4 16Z" fill="currentColor"/>
+  <path d="M20 16L22 20L20 18L18 20L20 16Z" fill="currentColor"/>
+  <circle cx="12" cy="12" r="1" fill="currentColor"/>
+</svg>

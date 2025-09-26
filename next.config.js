@@ -7,6 +7,9 @@ const nextConfig = {
     images: {
         domains: ["zjpubvbqfagluanwtbjx.supabase.co"],
     },
+    // Optimize resource loading to prevent preload warnings
+    optimizeFonts: true,
+    compress: true,
     async headers() {
         return [
             {

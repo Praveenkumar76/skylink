@@ -25,6 +25,7 @@ Created with **Next.js 13+**, **Supabase** and **PostgreSQL**. Deployed on [**Ve
 -   **Infinite Scroll**: Infinite scrolling, providing a seamless browsing experience for users as they explore their timeline.
 -   **Date and Time Formatting**: Formatting timestamps and display them in a user-friendly manner, such as relative time (e.g., "5 minutes ago").
 -   **Deleting**: Users can delete their own posts, replies and shares. Also unlike posts.
+-   **AI Assistant**: Integrated chatbot powered by Groq AI to help users with questions and provide assistance.
 -   Dark and Light mode.
 -   Optimistic updates on likes, shares, followings and so on.
 -   Full-Stack Next.js (13+) App directory advantages.
@@ -50,6 +51,30 @@ Created with **Next.js 13+**, **Supabase** and **PostgreSQL**. Deployed on [**Ve
 -   [Eslint](https://eslint.org/) for linting.
 -   [Prettier](https://prettier.io/) for formatting.
 -   [Sass](https://sass-lang.com/) for SCSS
+-   [Groq AI](https://groq.com/) for AI-powered chatbot assistance
+
+## Setup
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory and add the following variables:
+
+```env
+# Groq API Configuration
+# Get your API key from: https://console.groq.com/keys
+GROQ_API_KEY=your_groq_api_key_here
+
+# Database Configuration (if needed)
+# DATABASE_URL=your_database_url_here
+```
+
+### AI Assistant Setup
+
+The Skylink Assistant is powered by Groq AI. To enable the chatbot:
+
+1. Visit [Groq Console](https://console.groq.com/keys) to get your free API key
+2. Add the `GROQ_API_KEY` to your environment variables
+3. The chatbot will appear as a floating button in the bottom-right corner of the application
 
 ## Roadmap
 

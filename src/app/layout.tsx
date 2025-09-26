@@ -14,6 +14,11 @@ export const metadata = {
         shortcut: '/assets/favicon.svg',
         apple: '/assets/favicon.png',
     },
+    other: {
+        // Disable automatic preloading to prevent console warnings
+        'preload-css': 'false',
+        'preload-favicon': 'false',
+    },
 };
 
 const roboto = localFont({

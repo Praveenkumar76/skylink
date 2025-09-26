@@ -4,6 +4,7 @@ import { useContext } from "react";
 import Link from "next/link";
 
 import { AuthContext } from "@/app/(twitter)/layout";
+import Chatbot from "../misc/Chatbot";
 
 export default function Footer() {
     const { token, isPending } = useContext(AuthContext);
@@ -14,7 +15,7 @@ export default function Footer() {
         return (
             <footer className="footer">
                 <div className="footer-div">
-                    <h1>Don’t miss what’s happening</h1>
+                    <h1>Don't miss what's happening</h1>
                     <p>People on SkyLink are the first to know.</p>
                 </div>
                 <div>
@@ -25,8 +26,9 @@ export default function Footer() {
                         Sign Up
                     </Link>
                 </div>
+                <Chatbot />
             </footer>
         );
 
-    return null;
+    return <Chatbot />;
 }

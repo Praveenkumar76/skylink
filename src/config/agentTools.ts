@@ -46,7 +46,7 @@ export const tools = [
             type: 'string',
             description: "The user's new full name.",
           },
-          bio: {
+          description: {
             type: 'string',
             description: "The user's new bio or description.",
           },

@@ -23,17 +23,18 @@ export async function createPostInSkylink({ content, userId }: { content: string
   return `Successfully created a new post.`;
 }
 
-export async function updateSkylinkProfile({ userId, updates }: { userId: string; updates: { name?: string; bio?: string; location?: string; website?: string; city?: string; district?: string; place?: string; websiteUrl?: string } }): Promise<string> {
+export async function updateSkylinkProfile({ userId, updates }: { userId: string; updates: { name?: string; description?: string; bio?: string; location?: string; website?: string; city?: string; district?: string; place?: string; websiteUrl?: string } }): Promise<string> {
   // DEBUG LOGS
   console.log("--- Attempting Profile Update ---");
   console.log("Received User ID:", userId);
   console.log("Received Updates Object:", updates);
   const resolvedLocation = updates.location || updates.city || updates.district || updates.place;
   const resolvedWebsite = updates.website || updates.websiteUrl;
+  const resolvedDescription = updates.description || updates.bio;
 
   const data: Record<string, unknown> = {};
   if (typeof updates.name === 'string') data.name = updates.name;
-  if (typeof updates.bio === 'string') data.description = updates.bio;
+  if (typeof resolvedDescription === 'string') data.description = resolvedDescription;
   if (typeof resolvedLocation === 'string') data.location = resolvedLocation;
   if (typeof resolvedWebsite === 'string') data.website = resolvedWebsite;
 

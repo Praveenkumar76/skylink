@@ -1,9 +1,20 @@
 import Groq from 'groq-sdk';
 import { tools } from '@/config/agentTools';
 import { getRagResponse } from '@/utilities/rag/ragService';
-import { createPostInSkylink, updateSkylinkProfile, getSkylinkProfile } from '@/services/actionService';
+import { createPostInSkylink, getSkylinkProfile, updateSkylinkProfile } from '@/services/actionService';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+async function updateProfileViaAPI(updates: any, userId: string): Promise<string> {
+  try {
+    // Call server action directly—no cookies/session required here
+    const result = await updateSkylinkProfile({ userId, updates });
+    return result || 'Profile updated successfully';
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    return 'Failed to update profile due to a server error';
+  }
+}
 
 const SYSTEM_PROMPT = `You are Sky, a helpful and efficient AI assistant for the "Skylink" social media platform.
 Your primary goal is to understand a user's request and use the available tools to fulfill it directly and immediately.
@@ -50,7 +61,7 @@ export async function processUserRequest({ prompt, userId }: { prompt: string; u
         functionResponse = await createPostInSkylink({ content: functionArgs.content, userId });
         break;
       case 'update_skylink_profile':
-        functionResponse = await updateSkylinkProfile({ userId, updates: functionArgs });
+        functionResponse = await updateProfileViaAPI(functionArgs, userId);
         break;
       case 'get_skylink_profile':
         functionResponse = await getSkylinkProfile({ userId });

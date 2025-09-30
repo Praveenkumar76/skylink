@@ -1,4 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { verifyJwtToken, getJwtSecretKey } from '@/utilities/auth';
+import { processUserRequest } from '@/services/agentService';
+import { UserProps } from '@/types/UserProps';
+import { prisma } from '@/prisma/client';
+import { SignJWT } from 'jose';
 
 export async function POST(request: NextRequest) {
     try {
@@ -11,66 +17,72 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const apiKey = process.env.GROQ_API_KEY;
-        
-        if (!apiKey) {
-            console.error('GROQ_API_KEY environment variable is not set');
+        // Get user authentication
+        const token = (await cookies()).get("token")?.value;
+        const verifiedToken: UserProps = token && (await verifyJwtToken(token));
+
+        if (!verifiedToken) {
             return NextResponse.json(
-                { error: 'Chatbot service is not configured - GROQ_API_KEY missing' },
-                { status: 500 }
+                { error: 'You must be logged in to use the AI assistant' },
+                { status: 401 }
             );
         }
 
-        console.log('API Key found, making request to Groq...');
+        console.log('Processing user request with agent service...');
 
-        const response = await fetch(
-            `https://api.groq.com/openai/v1/chat/completions`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
+        // Use the agent service to process the request
+        const response = await processUserRequest({
+            prompt,
+            userId: verifiedToken.id
+        });
+
+        // Refresh JWT so any profile changes are reflected in the client session
+        try {
+            const updatedUser = await prisma.user.findUnique({
+                where: { id: verifiedToken.id },
+                select: {
+                    id: true,
+                    username: true,
+                    name: true,
+                    description: true,
+                    location: true,
+                    website: true,
+                    isPremium: true,
+                    createdAt: true,
+                    photoUrl: true,
+                    headerUrl: true,
                 },
-                body: JSON.stringify({
-                    messages: [
-                        {
-                            role: "system",
-                            content: "You are the SkyLink AI assistant, a helpful AI assistant for the Skylink social media platform. You help users with questions about Skylink features, provide general assistance, and answer queries in a friendly, helpful manner. Keep your responses concise and relevant."
-                        },
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-                    ],
-                    model: "llama-3.1-8b-instant",
-                    temperature: 0.7,
-                    max_tokens: 1024,
-                    top_p: 0.95,
-                }),
+            });
+
+            const res = NextResponse.json({ response });
+
+            if (updatedUser) {
+                const newToken = await new SignJWT({
+                    id: updatedUser.id,
+                    username: updatedUser.username,
+                    name: updatedUser.name,
+                    description: updatedUser.description,
+                    location: updatedUser.location,
+                    website: updatedUser.website,
+                    isPremium: updatedUser.isPremium,
+                    createdAt: updatedUser.createdAt,
+                    photoUrl: updatedUser.photoUrl,
+                    headerUrl: updatedUser.headerUrl,
+                })
+                    .setProtectedHeader({ alg: 'HS256' })
+                    .setIssuedAt()
+                    .setExpirationTime('1d')
+                    .sign(getJwtSecretKey());
+
+                res.cookies.set({ name: 'token', value: newToken, path: '/' });
             }
-        );
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Groq API request failed:', response.status, response.statusText, errorText);
-            return NextResponse.json(
-                { error: `Failed to get response from AI service: ${response.status} ${response.statusText}` },
-                { status: 500 }
-            );
+            return res;
+        } catch {
+            // If refresh fails, still return the agent response
+            return NextResponse.json({ response });
         }
 
-        const data = await response.json();
-        
-        if (data.choices && data.choices[0] && data.choices[0].message) {
-            const botResponse = data.choices[0].message.content;
-            return NextResponse.json({ response: botResponse });
-        } else {
-            console.error('Invalid response format from Groq API:', data);
-            return NextResponse.json(
-                { error: 'Invalid response from AI service' },
-                { status: 500 }
-            );
-        }
     } catch (error) {
         console.error('Error in chatbot API route:', error);
         return NextResponse.json(

@@ -15,7 +15,7 @@ export default function Footer() {
         return (
             <footer className="footer">
                 <div className="footer-div">
-                    <h1>Don't miss what's happening</h1>
+                    <h1>Don&apos;t miss what&apos;s happening</h1>
                     <p>People on SkyLink are the first to know.</p>
                 </div>
                 <div>

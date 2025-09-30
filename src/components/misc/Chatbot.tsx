@@ -203,7 +203,7 @@ export default function Chatbot() {
                 <div id="chat-window" ref={chatWindowRef} className="chatbot-window">
                     {messages.length === 0 && (
                         <div className="chatbot-welcome">
-                            <p>👋 Hello! I'm your Skylink Assistant.</p>
+                            <p>👋 Hello! I&apos;m your Skylink Assistant.</p>
                             <p>Ask me anything about Skylink or get help with your questions!</p>
                         </div>
                     )}

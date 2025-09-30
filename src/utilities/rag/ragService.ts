@@ -15,25 +15,62 @@ type MatchedText = { id: string; tweet_id: string | null; content: string; dista
 type MatchedImage = { id: string; tweet_id: string | null; image_url: string; distance: number };
 
 export async function getRagResponse(userQuery: string): Promise<string> {
-  // 1) Encode query in both spaces
-  const [bgeQuery, clipTextQuery] = await Promise.all([
-    getBgeEmbedding(userQuery),
-    getClipTextEmbedding(userQuery),
-  ]);
+  // Fast path: handle common intent without external embeddings
+  const lower = userQuery.toLowerCase();
+  const wantsTrending = /(trending|top|most\s+liked|popular)/.test(lower);
+  if (wantsTrending) {
+    try {
+      const top = await prisma.tweet.findMany({
+        where: { isReply: false },
+        include: {
+          author: { select: { username: true, name: true } },
+          _count: { select: { likedBy: true, retweetedBy: true } },
+        },
+        orderBy: [{ likedBy: { _count: "desc" } }, { createdAt: "desc" }],
+        take: 5,
+      });
+      if ((top || []).length > 0) {
+        const lines = top.map((t, i) => `${i + 1}. @${t.author.username}: ${t.text} (likes: ${t._count.likedBy}, shares: ${t._count.retweetedBy})`);
+        return `Top posts right now:\n${lines.join("\n")}`;
+      }
+    } catch (e) {
+      // ignore and fall through to generic answer
+    }
+  }
 
-  // 2) Retrieve
-  const [texts, images] = await Promise.all([
-    prisma.$queryRawUnsafe<MatchedText[]>(
-      `SELECT * FROM public.match_tweets_by_text($1::vector, $2::int)` as any,
-      JSON.stringify(bgeQuery),
-      3
-    ),
-    prisma.$queryRawUnsafe<MatchedImage[]>(
-      `SELECT * FROM public.match_images_by_text($1::vector, $2::int)` as any,
-      JSON.stringify(clipTextQuery),
-      2
-    ),
-  ]);
+  // 1) Encode query in both spaces (best-effort)
+  let bgeQuery: number[] | null = null;
+  let clipTextQuery: number[] | null = null;
+  try {
+    [bgeQuery, clipTextQuery] = await Promise.all([
+      getBgeEmbedding(userQuery).catch(() => null as any),
+      getClipTextEmbedding(userQuery).catch(() => null as any),
+    ]);
+  } catch {
+    // ignore
+  }
+
+  // 2) Retrieve (only if embeddings are available)
+  let texts: MatchedText[] = [];
+  let images: MatchedImage[] = [];
+  try {
+    if (bgeQuery) {
+      texts = await prisma.$queryRawUnsafe<MatchedText[]>(
+        `SELECT * FROM public.match_tweets_by_text($1::vector, $2::int)` as any,
+        JSON.stringify(bgeQuery),
+        3
+      );
+    }
+    if (clipTextQuery) {
+      images = await prisma.$queryRawUnsafe<MatchedImage[]>(
+        `SELECT * FROM public.match_images_by_text($1::vector, $2::int)` as any,
+        JSON.stringify(clipTextQuery),
+        2
+      );
+    }
+  } catch {
+    // retrieval is optional
+  }
 
   // 3) Build context
   const textContext = (texts || [])
@@ -62,5 +99,3 @@ export async function getRagResponse(userQuery: string): Promise<string> {
   const answer = completion.choices?.[0]?.message?.content || "";
   return answer.trim();
 }
-
-

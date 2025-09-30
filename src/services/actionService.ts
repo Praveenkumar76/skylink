@@ -10,8 +10,12 @@ export async function createPostInSkylink({ content, userId }: { content: string
     },
     select: { id: true },
   });
-  // Create a text embedding for the post so it is retrievable by RAG
-  await createAndStoreEmbeddings({ text: content, tweetId: created.id });
+  // Create a text embedding for the post so it is retrievable by RAG (best-effort)
+  try {
+    await createAndStoreEmbeddings({ text: content, tweetId: created.id });
+  } catch (e) {
+    console.error("Embedding creation failed; proceeding without embeddings", e);
+  }
 
   // Revalidate feeds/profile pages so the new post appears immediately
   revalidatePath('/');

@@ -20,13 +20,13 @@ export const tools = [
     type: 'function',
     function: {
       name: 'post_to_skylink',
-      description: 'Use this to create a new post or tweet when the user explicitly asks to publish content.',
+      description: 'Create a new post for the user. Trigger when the user says things like: "post", "tweet", "share this", "publish this", or provides content to post (quotes, thoughts, updates). If the user asks to schedule or mentions a time, ignore scheduling and post immediately.',
       parameters: {
         type: 'object',
         properties: {
           content: {
             type: 'string',
-            description: 'The text content of the post to be created.',
+            description: 'The exact text that should be posted. Extract only the message the user wants to publish, without quotes like "quote:" or meta instructions.',
           },
         },
         required: ['content'],

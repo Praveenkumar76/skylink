@@ -24,6 +24,7 @@ Key Instructions:
 2) Differentiate Reading vs. Writing:
    - If the user asks a question to GET information (e.g., "what is my current location?"), use a "get" tool like get_skylink_profile.
    - If the user gives a command to CHANGE information (e.g., "update my location to Bihar"), use an "update" or "post" tool.
+   - If the user asks to post/tweet/share/publish something (quotes, thoughts, updates), call post_to_skylink with the cleaned content text.
 3) Parameter Consolidation: When using update_skylink_profile, if a user mentions a city, district, or a specific place, consolidate all of that information into the single location argument.
 4) Be Decisive: Use the user's phrasing to confidently select the correct tool. Do not ask for confirmation unless absolutely necessary. Execute the user's command.`;
 
@@ -80,5 +81,31 @@ export async function processUserRequest({ prompt, userId }: { prompt: string; u
     return final.choices?.[0]?.message?.content || functionResponse || 'Done.';
   }
 
+  // Fallback: if the model did not emit a tool call but the prompt clearly asks to post,
+  // extract the content and create the post directly.
+  const lower = prompt.toLowerCase();
+  const postIntent = /(post|tweet|publish|share)\b/.test(lower);
+  if (postIntent) {
+    const content = extractPostContent(prompt);
+    if (content) {
+      const result = await createPostInSkylink({ content, userId });
+      return result;
+    }
+  }
+
   return responseMessage?.content || "I'm not sure how to help with that.";
+}
+
+function extractPostContent(input: string): string {
+  // If the user provided quoted text, prefer that
+  const quoteMatch = input.match(/["“”']([^"“”']{1,500})["“”']/);
+  if (quoteMatch && quoteMatch[1]) {
+    return quoteMatch[1].trim();
+  }
+  // Remove leading intent verbs and filler
+  const cleaned = input
+    .replace(/^\s*(please\s+)?(post|tweet|publish|share)\s+(about|this|that|a|an|the)?\s*/i, '')
+    .trim();
+  // Truncate to a safe length for a tweet-like post
+  return cleaned.substring(0, 280);
 }

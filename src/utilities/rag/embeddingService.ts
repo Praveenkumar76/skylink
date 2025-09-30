@@ -86,21 +86,44 @@ export type CreateEmbeddingParams = {
 export async function createAndStoreEmbeddings(params: CreateEmbeddingParams) {
   const { text, imageUrl, tweetId = null } = params;
 
-  const [bge, clipText, clipImage] = await Promise.all([
-    getBgeEmbedding(text),
-    getClipTextEmbedding(text),
-    imageUrl ? getClipImageEmbedding(imageUrl) : Promise.resolve(null),
-  ]);
+  // If HF key is missing, skip embeddings entirely without failing the caller
+  if (!HF_API_KEY) {
+    // eslint-disable-next-line no-console
+    console.warn("Skipping embeddings: HUGGINGFACE_API_KEY not set");
+    return { bgeEmbedding: null, clipTextEmbedding: null, clipImageEmbedding: null } as any;
+  }
 
-  // Store text embedding (BGE)
-  await prisma.$executeRawUnsafe(
-    `INSERT INTO public.text_embeddings (tweet_id, content, embedding) VALUES ($1::uuid, $2::text, $3::vector)`,
-    tweetId,
-    text,
-    JSON.stringify(bge)
-  );
+  let bge: number[] | null = null;
+  let clipText: number[] | null = null;
+  let clipImage: number[] | null = null;
 
-  // Store image embedding (CLIP) if provided
+  try {
+    bge = await getBgeEmbedding(text);
+  } catch (e) {
+    console.error("BGE embedding failed", e);
+  }
+  try {
+    clipText = await getClipTextEmbedding(text);
+  } catch (e) {
+    console.error("CLIP text embedding failed", e);
+  }
+  if (imageUrl) {
+    try {
+      clipImage = await getClipImageEmbedding(imageUrl);
+    } catch (e) {
+      console.error("CLIP image embedding failed", e);
+    }
+  }
+
+  // Store available embeddings (best-effort)
+  if (bge) {
+    await prisma.$executeRawUnsafe(
+      `INSERT INTO public.text_embeddings (tweet_id, content, embedding) VALUES ($1::uuid, $2::text, $3::vector)`,
+      tweetId,
+      text,
+      JSON.stringify(bge)
+    );
+  }
   if (imageUrl && clipImage) {
     await prisma.$executeRawUnsafe(
       `INSERT INTO public.image_embeddings (tweet_id, image_url, embedding) VALUES ($1::uuid, $2::text, $3::vector)`,
@@ -110,11 +133,7 @@ export async function createAndStoreEmbeddings(params: CreateEmbeddingParams) {
     );
   }
 
-  return {
-    bgeEmbedding: bge,
-    clipTextEmbedding: clipText,
-    clipImageEmbedding: clipImage,
-  };
+  return { bgeEmbedding: bge, clipTextEmbedding: clipText, clipImageEmbedding: clipImage } as any;
 }
 
 

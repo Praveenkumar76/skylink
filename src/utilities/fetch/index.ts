@@ -1,6 +1,7 @@
 import { NotificationContent, NotificationTypes } from "@/types/NotificationProps";
 
-const HOST_URL = process.env.NEXT_PUBLIC_HOST_URL;
+// Normalize to avoid trailing slashes that cause double-slash URLs and CORS preflight redirects
+const HOST_URL = (process.env.NEXT_PUBLIC_HOST_URL || "").replace(/\/+$/, "");
 
 export const getAllTweets = async (page = "1") => {
     const response = await fetch(`${HOST_URL}/api/tweets/all?page=${page}`, {

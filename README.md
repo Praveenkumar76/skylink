@@ -1,113 +1,122 @@
-# SkyLink (Full-stack Next.js 13+)
+# SkyLink
 
-Created with **Next.js 13+**, **Supabase** and **PostgreSQL**. Deployed on [**Vercel**](https://vercel.com/).
+A full‑stack social app built with Next.js App Router, TypeScript, Prisma, PostgreSQL and Supabase Storage. It includes timelines, profiles, messaging, notifications, search and an AI assistant.
 
----
+## Tech Stack
 
-`Secret key for SkyLink Premium: thanksforcaring`
-
----
+- Next.js 15 (App Router) + React 18 + TypeScript
+- Prisma ORM + PostgreSQL
+- Supabase Storage (media uploads)
+- Material UI (MUI)
+- TanStack React Query
+- SCSS (Sass)
+- Authentication with bcrypt + jose (JWT)
+- Groq AI for the chatbot
 
 ## Features
 
--   **Profiles**: Users can create their own profiles, add a profile picture, and customize their bio to express their personality and interests.
--   **Posts and Replies**: Just like SkyLink, users can compose and share posts of up to a certain character limit, allowing them to share their thoughts, ideas, or any other content with their followers.
--   **Following/Followers**: Users can follow other users to see their posts on their timeline and gain followers who are interested in their content.
--   **Likes/Shares**: Users can engage with posts by liking them to show appreciation or sharing them to share them with their own followers. Also undo shares and unlike support.
--   **Notifications**: Users receive notifications when someone likes or shares their posts, when they gain new followers, or when they are mentioned in a post by another user.
--   **Search**: Users can search for specific posts or accounts to find relevant content or connect with specific users.
--   **Direct Messaging**: Users can send private messages to other users, allowing for one-on-one conversations and interactions.
--   **SkyLink Premium**: Users can get premium status by entering a secret code, getting an icon with their name.
--   **Emoji Support**: Users can easily add emojis to their posts and replies, enhancing expression and engagement.
--   **User Authentication and Security**: Custom user authentication with hooks, bcrypt, JWT. Access control, ensuring secure login and protected user data.
--   **Real-time Data Fetching**: Implement real-time updates with react-query, allowing users to see new posts, likes, and shares without manually refreshing the page.
--   **Image Support**: Users can upload images with their posts, replies, profile and header pictures and direct messages, enhancing visual content sharing.
--   **Infinite Scroll**: Infinite scrolling, providing a seamless browsing experience for users as they explore their timeline.
--   **Date and Time Formatting**: Formatting timestamps and display them in a user-friendly manner, such as relative time (e.g., "5 minutes ago").
--   **Deleting**: Users can delete their own posts, replies and shares. Also unlike posts.
--   **AI Assistant**: Integrated chatbot powered by Groq AI to help users with questions and provide assistance.
--   Dark and Light mode.
--   Optimistic updates on likes, shares, followings and so on.
--   Full-Stack Next.js (13+) App directory advantages.
--   Responsive design.
+- Profiles with avatar, header, bio, website and location
+- Tweets, replies, likes, retweets and share counters with optimistic updates
+- Infinite scrolling feeds and “Who to follow” suggestions
+- Notifications (like, retweet, follow, message, welcome)
+- Direct messages with images, typing indicator and relative timestamps
+- Search for users and tweets
+- Light/Dark theme, accessible UI, responsive layout
+- File uploads to Supabase Storage
+- AI Assistant (SkyGen) with floating launcher
 
-## Helper Dependencies
+## Getting Started
 
--   [Prisma](https://www.prisma.io/) for database access and manipulation.
--   [Supabase JS Client](https://supabase.io/) for interacting with the storage.
--   [Material UI](https://mui.com/) production ready components UI library.
--   [TypeScript](https://www.typescriptlang.org/) for types.
--   [React Query](https://react-query.tanstack.com/) hooks and utilities for data fetching and state management.
--   [Emoji Mart](https://missiveapp.com/open/emoji-mart) for Emoji picker and rendering components in React.
--   [Bcrypt](https://www.npmjs.com/package/bcrypt) password hashing and encryption functionality.
--   [Date-fns](https://date-fns.org/) utility functions for date manipulation and formatting.
--   [Framer Motion](https://www.framer.com/motion/) animation components and utilities.
--   [Formik](https://formik.org/) form management utilities.
--   [Yup](https://www.npmjs.com/package/yup) for form validation schemas.
--   [React Dropzone](https://react-dropzone.js.org/) drag-and-drop file upload component for React.
--   [react-icons](https://react-icons.github.io/react-icons/) collection of customizable icons.
--   [react-infinite-scroll-component](https://www.npmjs.com/package/react-infinite-scroll-component) for infinite scrolling.
--   [Jose](https://www.npmjs.com/package/jose) for handling JWTs.
--   [Eslint](https://eslint.org/) for linting.
--   [Prettier](https://prettier.io/) for formatting.
--   [Sass](https://sass-lang.com/) for SCSS
--   [Groq AI](https://groq.com/) for AI-powered chatbot assistance
+### Prerequisites
 
-## Setup
+- Node.js 18+
+- A PostgreSQL database
+- Optional: a Supabase project (for storage) and a Groq API key (for AI)
 
-### Environment Variables
+### 1) Install dependencies
 
-Create a `.env.local` file in the root directory and add the following variables:
-
-```env
-# Groq API Configuration
-# Get your API key from: https://console.groq.com/keys
-GROQ_API_KEY=your_groq_api_key_here
-
-# Database Configuration (if needed)
-# DATABASE_URL=your_database_url_here
+```bash
+npm install
 ```
 
-### AI Assistant Setup
+### 2) Environment variables
 
-The Skylink Assistant is powered by Groq AI. To enable the chatbot:
+Create `.env.local` in the project root:
 
-1. Visit [Groq Console](https://console.groq.com/keys) to get your free API key
-2. Add the `GROQ_API_KEY` to your environment variables
-3. The chatbot will appear as a floating button in the bottom-right corner of the application
+```env
+# Database
+DATABASE_URL=postgres://user:password@host:5432/db
+DIRECT_URL=postgres://user:password@host:5432/db
 
-## Roadmap
+# Auth/JWT (example values)
+JWT_ISSUER=skylink
+JWT_AUDIENCE=skylink-users
+JWT_SECRET=replace_with_a_long_random_secret
 
-### ⮕ You can access the complete progression of development from [changelog.md file](/CHANGELOG.md).
+# Supabase (client-side public keys for uploads)
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_KEY=YOUR_PUBLIC_ANON_KEY
 
--   [x] Only verified blue tick user should show in the who to follow section.
--   [ ] Add block/unblock feature.
--   [ ] Add hidden/locked profile.
--   [ ] Find out how to infinite load for every page / extract usememo to the different component? because can't conditionaly render.
--   [ ] Find a better way of optimistic messages other than faking it, refactor whole messaging system.
--   [ ] Add Turkish language support.
--   [ ] Multiple test accounts when onclick test login, test account goes to random.
--   [ ] Email / sms verification just for the fun.
+# Groq AI (chatbot)
+GROQ_API_KEY=your_groq_api_key
+```
 
-## Acknowledgements
+Adjust names based on your infrastructure. Only `NEXT_PUBLIC_*` variables are exposed to the browser.
 
--   [Google Fonts](https://fonts.google.com/) (Poppins and Roboto fonts provider)
+### 3) Generate Prisma client and run migrations
 
-## How It Looks
+```bash
+npx prisma generate
+npx prisma migrate deploy
+```
 
-![ss](./public/screenshots/ss2.png)
-![ss](./public/screenshots/ss5.png)
-![ss](./public/screenshots/ss1.png)
-![ss](./public/screenshots/ss6.png)
-![ss](./public/screenshots/ss3.png)
-![ss](./public/screenshots/ss4.png)
+The schema is in `src/prisma/schema.prisma`. If you're developing locally, you can also run `npx prisma migrate dev`.
 
-## Contact
+### 4) Start the app
 
-⮕ [LinkedIn](https://www.linkedin.com/in/fatiharapoglu/)
+```bash
+npm run dev
+# http://localhost:3000
+```
 
-⮕ [Portfolio](https://fatiharapoglu.dev)
+Build and start in production:
+
+```bash
+npm run build
+npm start
+```
+
+## Project Structure
+
+- `src/app` – Next.js routes and layouts (App Router)
+- `src/components` – UI components (layout, tweet, user, misc)
+- `src/app/api` – API routes for tweets, users, messages, notifications, search, chatbot
+- `src/prisma` – Prisma client and migrations
+- `src/utilities` – helpers (auth, fetch, storage, rag)
+- `src/styles` – global SCSS and resets
+
+## Key Scripts
+
+- `npm run dev` – start development server
+- `npm run build` – build production bundle
+- `npm start` – run production server
+- `npm run lint` – lint with ESLint
+
+## Deployment
+
+This project can be deployed to any Node.js host or to Vercel. Ensure environment variables are configured in the host. For storage, set the public Supabase credentials. For the database, set `DATABASE_URL` and run migrations during deploy.
+
+## Screenshots
+
+![Explore](./public/screenshots/s1.png)
+![Profile](./public/screenshots/s2.png)
+![Chatbot](./public/screenshots/s3.png)
+
+## Notes
+
+- Premium demo code (for local testing): `thanksforcaring`.
+- Media assets live under `public/assets`.
 
 ## License
 
-Distributed under the [MIT](https://choosealicense.com/licenses/mit/) License.
+MIT License.

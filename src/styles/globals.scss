@@ -1,8 +1,8 @@
 :root {
     --background-primary: #ffffff;
-    --background-blue: #1da1f2;
-    --twitter-blue: #1da1f2;
-    --twitter-dark-blue: #1b90dd;
+    --background-blue: #9b00ff; /* neon violet bg accents */
+    --twitter-blue: #9b00ff; /* primary neon violet */
+    --twitter-dark-blue: #d000ff; /* hover neon violet */
     --twitter-gray: #657786;
     --twitter-light-gray: #d1dce4;
     --twitter-black: #14171a;
@@ -31,9 +31,9 @@
 
 [data-theme="dark"] {
     --background-primary: #000000;
-    --background-blue: #000000;
-    --twitter-blue: #1976d2;
-    --twitter-dark-blue: #1d5fa1;
+    --background-blue: #0a0011;
+    --twitter-blue: #bb00ff;
+    --twitter-dark-blue: #e000ff;
     --twitter-gray: #9898a3;
     --twitter-light-gray: #303030;
     --twitter-black: #f8f8f8;
@@ -127,6 +127,11 @@ main {
         background-color: var(--hover);
         color: var(--twitter-black);
     }
+}
+
+/* Dark mode close button hover */
+[data-theme="dark"] .chatbot-close-btn:hover {
+    color: var(--const-white);
 }
 
 .btn-danger-outline {
@@ -319,11 +324,13 @@ main {
             width: fit-content;
             color: var(--twitter-bird);
 
-            & > svg {
+            & > svg, & > img {
                 border-radius: 5rem;
                 padding: 0.5rem;
                 transition: background-color 0.2s ease-in-out;
                 font-size: 30px;
+                width: 50px;
+                height: 50px;
 
                 &:hover {
                     background-color: var(--hover);
@@ -2274,6 +2281,30 @@ button.icon-hoverable {
     }
 }
 
+/* Neon violet circular glow for AI logo in LIGHT mode */
+[data-theme="light"] .chatbot-toggler:hover .chatbot-logo,
+[data-theme="light"] .chatbot-toggler:hover .chatbot-logo-video {
+    border-radius: 50%;
+    border: 2px solid var(--twitter-blue);
+    box-shadow:
+        0 0 10px rgba(155, 0, 255, 0.7),
+        0 0 20px rgba(155, 0, 255, 0.6),
+        0 0 35px rgba(155, 0, 255, 0.45),
+        0 0 55px rgba(155, 0, 255, 0.35);
+}
+
+/* Neon violet circular glow for AI logo in DARK mode */
+[data-theme="dark"] .chatbot-toggler:hover .chatbot-logo,
+[data-theme="dark"] .chatbot-toggler:hover .chatbot-logo-video {
+    border-radius: 50%;
+    border: 2px solid var(--twitter-blue);
+    box-shadow:
+        0 0 10px rgba(155, 0, 255, 0.7),
+        0 0 20px rgba(155, 0, 255, 0.6),
+        0 0 35px rgba(155, 0, 255, 0.45),
+        0 0 55px rgba(155, 0, 255, 0.35);
+}
+
 .chatbot-container {
     position: fixed;
     bottom: 1rem;
@@ -2321,6 +2352,17 @@ button.icon-hoverable {
         font-size: 1.1rem;
         color: var(--twitter-black);
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+}
+
+/* Dark mode styling for chatbot header */
+[data-theme="dark"] .chatbot-header {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-bottom: 1px solid var(--border-color);
+
+    span {
+        color: var(--const-white);
+        text-shadow: none;
     }
 }
 
@@ -2373,6 +2415,12 @@ button.icon-hoverable {
     }
 }
 
+/* Dark mode styling for chatbot window */
+[data-theme="dark"] .chatbot-window {
+    background-color: rgba(0, 0, 0, 0.55);
+    color: var(--const-white);
+}
+
 .chatbot-welcome {
     text-align: center;
     padding: 1rem;
@@ -2411,6 +2459,13 @@ button.icon-hoverable {
         }
     }
 
+/* Dark mode bubble colors */
+[data-theme="dark"] .chatbot-message.bot .chatbot-message-content {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--const-white);
+    text-shadow: none;
+}
+
     &.typing {
         .chatbot-message-content {
             animation: typing 1.5s infinite;
@@ -2439,6 +2494,11 @@ button.icon-hoverable {
     z-index: 1;
 }
 
+/* Dark mode styling for chatbot form */
+[data-theme="dark"] .chatbot-form {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 .chatbot-input {
     flex: 1;
     padding: 0.75rem;
@@ -2463,6 +2523,15 @@ button.icon-hoverable {
         opacity: 0.6;
         cursor: not-allowed;
     }
+}
+
+/* Dark mode styling for input */
+[data-theme="dark"] .chatbot-input {
+    background-color: rgba(0, 0, 0, 0.55);
+    color: var(--const-white);
+}
+[data-theme="dark"] .chatbot-input::placeholder {
+    color: var(--twitter-muted);
 }
 
 .chatbot-send-btn {
@@ -2550,7 +2619,7 @@ button.icon-hoverable {
 
 @keyframes logoClickPulse {
     0% { transform: scale(1); box-shadow: 0 0 0 rgba(29, 161, 242, 0); }
-    50% { transform: scale(0.95); box-shadow: 0 0 20px rgba(29, 161, 242, 0.55); }
+    50% { transform: scale(0.95); box-shadow: 0 0 20px rgba(196, 29, 242, 0.55); }
     100% { transform: scale(1); box-shadow: 0 0 0 rgba(29, 161, 242, 0); }
 }
 
@@ -2565,6 +2634,16 @@ button.icon-hoverable {
     background: transparent;
     width: 80px;
     height: 80px;
+}
+
+/* Match light-mode circle glow when hovering the video logo in DARK mode */
+[data-theme="dark"] .logo-video:hover {
+    border: 2px solid var(--twitter-blue);
+    box-shadow:
+        0 0 10px rgba(155, 0, 255, 0.7),
+        0 0 20px rgba(155, 0, 255, 0.6),
+        0 0 35px rgba(155, 0, 255, 0.45),
+        0 0 55px rgba(155, 0, 255, 0.35);
 }
 
 .logo-circle-container {
@@ -2611,12 +2690,12 @@ button.icon-hoverable {
 }
 
 /* Show circle and glow only when hovering */
-.logo-circle-container:hover .logo-circle {
-    opacity: 1;
-    border: 2px solid #1da1f2;
-    box-shadow:
-        0 0 10px rgba(29, 161, 242, 0.7),
-        0 0 20px rgba(29, 161, 242, 0.6),
-        0 0 35px rgba(29, 161, 242, 0.45),
-        0 0 55px rgba(29, 161, 242, 0.35);
-}
+    .logo-circle-container:hover .logo-circle {
+        opacity: 1;
+        border: 2px solid var(--twitter-blue);
+        box-shadow:
+            0 0 10px rgba(155, 0, 255, 0.7),
+            0 0 20px rgba(155, 0, 255, 0.6),
+            0 0 35px rgba(155, 0, 255, 0.45),
+            0 0 55px rgba(155, 0, 255, 0.35);
+    }

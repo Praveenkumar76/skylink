@@ -47,6 +47,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             createTheme({
                 palette: {
                     mode: theme === "light" ? "light" : "dark",
+                    primary: {
+                        main: theme === "light" ? "#9b00ff" : "#bb00ff",
+                        dark: theme === "light" ? "#d000ff" : "#e000ff",
+                        light: theme === "light" ? "#d08bff" : "#e6a8ff",
+                        contrastText: "#ffffff",
+                    },
                 },
             }),
         [theme]

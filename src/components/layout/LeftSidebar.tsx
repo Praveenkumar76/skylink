@@ -13,6 +13,7 @@ import { logout } from "@/utilities/fetch";
 import { getFullURL } from "@/utilities/misc/getFullURL";
 import UnreadNotificationsBadge from "../misc/UnreadNotificationsBadge";
 import SkyLinkIcon from "../misc/SkyLinkIcon";
+import { ThemeContext } from "@/app/providers";
 
 export default function LeftSidebar() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -21,6 +22,7 @@ export default function LeftSidebar() {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const { token } = useContext(AuthContext);
+    const { theme } = useContext(ThemeContext);
 
     const router = useRouter();
     const pathname = usePathname();
@@ -56,7 +58,7 @@ export default function LeftSidebar() {
             <aside className="left-sidebar">
                 <div className="fixed">
                     <Link href="/explore" className="twitter-icon">
-                        <SkyLinkIcon size={28} />
+                        <SkyLinkIcon size={124} variant={theme === "dark" ? "white" : "default"} />
                     </Link>
                     <nav>
                         <ul>

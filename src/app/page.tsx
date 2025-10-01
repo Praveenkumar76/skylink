@@ -53,27 +53,36 @@ export default function RootPage() {
                 <div className="root-left">
                     <Image src="/assets/root.png" alt="" fill sizes="100vw" />
                     <div className="root-left-logo">
-                        <Image src="/assets/favicon-white.png" alt="" width={140} height={140} />
+                        <Image src="/assets/favicon-white.png" alt="" width={740} height={740} />
                     </div>
                 </div>
                 <div className="root-right">
-                    <Image src="/assets/favicon.png" alt="" width={40} height={40} />
-                    <h1>Happening now</h1>
-                    <h2>Join SkyLink today.</h2>
-                    <div className="button-group">
-                        <button className="btn" onClick={handleSignUpClick}>
-                            Create account
+                    {/* <Image src="/assets/favicon.png" alt="" width={40} height={40} /> */}
+                    <h1 className="text-4xl font-bold">Happening now</h1>
+                    <h2 className="text-2xl font-medium mt-2">Join SkyLink today.</h2>
+                    <div className="button-group mt-4 space-x-3">
+                        <button
+                        className="btn text-lg px-6 py-2"
+                        onClick={handleSignUpClick}
+                        >
+                        Create account
                         </button>
-                        <button className="btn btn-light" onClick={handleLogInClick}>
-                            Sign in
+                        <button
+                        className="btn btn-light text-lg px-6 py-2"
+                        onClick={handleLogInClick}
+                        >
+                        Sign in
                         </button>
                         <Tooltip
-                            title="You can log in as test account to get full user priviliges if you don't have time to sign up. You can ALSO just look around without even being logged in, just like real SkyVerse!"
-                            placement="bottom"
+                        title="You can log in as test account to get full user priviliges if you don't have time to sign up. You can ALSO just look around without even being logged in, just like real SkyVerse!"
+                        placement="bottom"
                         >
-                            <button onClick={handleTestLogin} className="btn btn-light">
-                                <span>Test account (Hover here!)</span>
-                            </button>
+                        <button
+                            onClick={handleTestLogin}
+                            className="btn btn-light text-lg px-6 py-2"
+                        >
+                            <span>Test account (Hover here!)</span>
+                        </button>
                         </Tooltip>
                     </div>
                 </div>

@@ -188,12 +188,12 @@ export default function Chatbot() {
 
                 {/* Chatbot Header */}
                 <div className="chatbot-header">
-                    <span>Skylink Assistant</span>
+                    <span>SkyGen</span>
                     <button 
                         id="close-chatbot" 
                         onClick={toggleChatbot}
                         className="chatbot-close-btn"
-                        title="Close Assistant"
+                        title="Close SkyGen"
                     >
                         &times;
                     </button>
@@ -203,8 +203,8 @@ export default function Chatbot() {
                 <div id="chat-window" ref={chatWindowRef} className="chatbot-window">
                     {messages.length === 0 && (
                         <div className="chatbot-welcome">
-                            <p>👋 Hello! I&apos;m your Skylink Assistant.</p>
-                            <p>Ask me anything about Skylink or get help with your questions!</p>
+                            <p>👋 Hello! I&apos;m your SkyGen.</p>
+                            <p>Ask me anything about SkyLink or get help with your questions!</p>
                         </div>
                     )}
                     {messages.map((message) => (

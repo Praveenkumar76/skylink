@@ -163,7 +163,7 @@ export default function Tweet({ tweet }: { tweet: TweetProps }) {
             {tweet.isRetweet &&
                 (token?.username === tweet.author.username ? (
                     <Link onClick={handlePropagation} href={`/${token?.username}`} className="retweeted-by">
-                        <RetweetIcon /> You retweeted.
+                        <RetweetIcon /> You reposted.
                     </Link>
                 ) : (
                     <Link
@@ -173,7 +173,7 @@ export default function Tweet({ tweet }: { tweet: TweetProps }) {
                         onMouseEnter={(e) => handlePopoverOpen(e, "retweet")}
                         onMouseLeave={handlePopoverClose}
                     >
-                        <RetweetIcon /> {`${tweet.author.name ? tweet.author.name : tweet.author.username} retweeted.`}
+                        <RetweetIcon /> {`${tweet.author.name ? tweet.author.name : tweet.author.username} reposted.`}
                     </Link>
                 ))}
             <Popover
